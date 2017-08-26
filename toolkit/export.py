@@ -37,6 +37,19 @@ def matrix_to_pex(name, matrix_dist, list_namefiles):
         f.write("\n")
     f.close()  # you can omit in most cases as the destructor will call it
 
+def getTopDistribution(tree, threshold):
+    topDitribution = {}
+
+    if tree.getDistributionTheme() is not None:
+        for i in range(0, len(tree.getDistributionTheme())):
+            if tree.getDistributionTheme()[i] > threshold:
+                topDitribution[str(i)] = tree.getDistributionTheme()[i]
+        #  dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme()))
+    else:
+        topDitribution = ""
+
+    return topDitribution
+
 # to format json
 def nodesToJson(tree, nodes):
     constOf = 10 # constante para multiplicar las distancias porque son muy pequeñas
@@ -47,7 +60,7 @@ def nodesToJson(tree, nodes):
         # 'Yes' if fruit == 'Apple' else 'No'
         nodes.append({"data": {"id": tree.getRootVal(),
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
-                               "extraInfo": dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme())) if tree.getDistributionTheme() != None else ""
+                               "topDistribution": getTopDistribution(tree, 0.001)  # getTopDistribution(tree, umbral)
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
                       }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
