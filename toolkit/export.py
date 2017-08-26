@@ -47,7 +47,7 @@ def nodesToJson(tree, nodes):
         # 'Yes' if fruit == 'Apple' else 'No'
         nodes.append({"data": {"id": tree.getRootVal(),
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
-                               "extraInfo": tree.getExtraInformation()["year"] if tree.getExtraInformation() !=None else ''
+                               "extraInfo": dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme())) if tree.getDistributionTheme() != None else ""
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
                       }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))

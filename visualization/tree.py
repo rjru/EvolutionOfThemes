@@ -3,7 +3,7 @@
 
 
 class BinaryTree:
-    def __init__(self, rootObj, weightAristToParent = None, deg=0, parent=None, extraInformation = None):
+    def __init__(self, rootObj, weightAristToParent = None, deg=0, parent=None, metaTheme=None):
         self.parent = parent
         self.key = rootObj
         self.deg = deg
@@ -15,25 +15,25 @@ class BinaryTree:
         self.leftChild = None
         self.rightChild = None
         self.root = None
-        self.extraInformation = extraInformation
+        self.distributionTheme = None if rootObj[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(rootObj)]
 
-    def insertLeft(self, newNode, weightAristToParent, extraInformation=None):
+    def insertLeft(self, newNode, weightAristToParent, metaTheme):
         parent = self
         if self.leftChild == None:
-            self.leftChild = BinaryTree(newNode, weightAristToParent, 1, parent, extraInformation)
+            self.leftChild = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
             self.deg = self.deg + 1
         else:
-            t = BinaryTree(newNode, weightAristToParent, 1, parent, extraInformation)
+            t = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
             t.leftChild = self.leftChild
             self.leftChild = t
 
-    def insertRight(self, newNode, weightAristToParent, extraInformation=None):
+    def insertRight(self, newNode, weightAristToParent, metaTheme):
         parent = self
         if self.rightChild == None:
-            self.rightChild = BinaryTree(newNode, weightAristToParent, 1, parent, extraInformation)
+            self.rightChild = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
             self.deg = self.deg + 1
         else:
-            t = BinaryTree(newNode, weightAristToParent, 1, parent, extraInformation)
+            t = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
             t.rightChild = self.rightChild
             self.rightChild = t
 
@@ -82,9 +82,8 @@ class BinaryTree:
     def getParent(self):
         return self.parent
 
-    def getExtraInformation(self):
-        return self.extraInformation
-
+    def getDistributionTheme(self):
+        return self.distributionTheme
 
 def preorder(tree):
     if tree:
@@ -98,26 +97,25 @@ def postorder(tree):
         postorder(tree.getRightChild())
         print(tree.getRootVal())
 
-#def insertRecursive(tree, rootedTree, pubmedDocs, muestraPmid):
 def insertRecursive(tree, rootedTree, metaDoc, metaTheme):
     if tree:  # arbol original
         lenChild = len(tree.get_children())
         if lenChild == 1:
             rootedTree.insertRight(tree.get_children()[0].name,
                                    tree.get_children()[0].dist,
-                                   tree.get_children()[0].name if tree.get_children()[0].name in [str(i) for i in metaDoc["muestraPmid"]] else None)
-
+                                   metaTheme
+                                   )
             insertRecursive(tree.get_children()[0], rootedTree.getRightChild(), metaDoc, metaTheme)
+
         if lenChild == 2:
-            #print(tree.get_children()[0].dist)
             rootedTree.insertRight(tree.get_children()[0].name,
                                    tree.get_children()[0].dist,
-                                   tree.get_children()[0].name if tree.get_children()[0].name in [str(i) for i in metaDoc["muestraPmid"]] else None)
-
+                                   metaTheme
+                                   )
             rootedTree.insertLeft(tree.get_children()[1].name,
                                   tree.get_children()[1].dist,
-                                  tree.get_children()[0].name if tree.get_children()[0].name in [str(i) for i in metaDoc["muestraPmid"]] else None)
-
+                                  metaTheme
+                                  )
             insertRecursive(tree.get_children()[0], rootedTree.getRightChild(), metaDoc, metaTheme)
             insertRecursive(tree.get_children()[1], rootedTree.getLeftChild(), metaDoc, metaTheme)
 
@@ -131,16 +129,12 @@ def setNamesTree(t):
             node.name = "i_" + node.name + '_' + str(cont)
         cont = cont + 1
 
-#def EteTreeToBinaryTree(t, pubmedDocs, muestraPmid, themesDescript):
 def EteTreeToBinaryTree(t, metaDoc, metaTheme):
     print('set Names')
     setNamesTree(t)
-    # print("names:", t)
-    print('insert recursive')
-    rootedTree = BinaryTree(t.name,
-                            extraInformation=metaDoc["pubmed"].docs[int(t.name)] if t.name in [str(i) for i in metaDoc["muestraPmid"]] else None)
 
-    #insertRecursive(t, rootedTree, pubmedDocs, muestraPmid)
+    print('insert recursive')
+    rootedTree = BinaryTree(t.name, metaTheme=metaTheme)
     insertRecursive(t, rootedTree, metaDoc, metaTheme)
     return rootedTree
 
@@ -162,7 +156,7 @@ print(r.getRightChild().getRootVal())
 print("borrarsh")
 '''
 
-
+'''
 r = BinaryTree('a')
 r.insertLeft('b', 2)
 r.getLeftChild().insertRight('d', 4)
@@ -177,3 +171,4 @@ print('preorder')
 preorder(r)
 print('postorder')
 postorder(r)
+'''

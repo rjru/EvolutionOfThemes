@@ -115,11 +115,13 @@ if __name__ == '__main__':
                "muestraPmid": muestraPmid
                }
     metaTheme = {"topicsSumary": topicsSumary, "distributionThemes": themesDescript,
-                 "idThemeOrdened": idThemeOrdened, "datesThemes": datesThemes
-                 } #idThemeOrdened, datesThemes
+                 "idThemeOrdened": idThemeOrdened, "datesThemes": datesThemes, "nameThemes": nameThemes
+                 }
 
-    #rootedTree = EteTreeToBinaryTree(t, pubmed.docs, muestraPmid, themesDescript)
-    rootedTree = EteTreeToBinaryTree(t, metaDoc, metaTheme)
+
+    rootedTree = EteTreeToBinaryTree(t, metaDoc, metaTheme) # since now, we use only themes
     radialLayout(rootedTree)
     jsonTree = treeToJson(rootedTree)
-    print(jsonTree)
+    jsonfile = open("res.json", 'w')
+    #print(jsonTree)
+    jsonfile.write(jsonTree)
