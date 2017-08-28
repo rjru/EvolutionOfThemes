@@ -80,7 +80,7 @@ def edgesToJson(tree, edges):
         edgesToJson(tree.getRightChild(), edges)
     return edges
 
-def treeToJson(rootedTree):
+def treeToJson(rootedTree, metaDoc):
     #print('nodes json')
     nodes = []
     nodesJs = nodesToJson(rootedTree, nodes)
@@ -88,6 +88,18 @@ def treeToJson(rootedTree):
     edges = []
     edgesJs = edgesToJson(rootedTree, edges)
 
-    jsonTree = {"nodes": nodesJs, "edges": edgesJs}
-    # print(str(jsonTree).replace("'", '"'))
+    for idDoc in metaDoc["pubmed"].docs:
+        metaDoc["pubmed"].docs[idDoc].pop("abstract")  # remove abstract of document because it is overload json file
+        metaDoc["pubmed"].docs[idDoc].pop("filePath")  # remove abstract of document because it is overload json file
+
+        metaDoc["pubmed"].docs[idDoc]["title"] = metaDoc["pubmed"].docs[idDoc]["title"].replace("\"", " ").replace("'", " ")
+
+        if "citLst" in metaDoc["pubmed"].docs[idDoc]:
+            metaDoc["pubmed"].docs[idDoc].pop("citLst")
+
+    for idDoc in metaDoc["pubmed"].docs:
+        metaDoc["pubmed"].docs[str(idDoc)] = metaDoc["pubmed"].docs.pop(idDoc)
+
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs}
+
     return str(jsonTree).replace("'", '"')

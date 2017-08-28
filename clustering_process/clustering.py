@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     rootedTree = EteTreeToBinaryTree(t, metaDoc, metaTheme) # since now, we use only themes
     radialLayout(rootedTree)
-    jsonTree = treeToJson(rootedTree)
+    jsonTree = treeToJson(rootedTree, metaDoc)
     jsonfile = open("res.json", 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)
