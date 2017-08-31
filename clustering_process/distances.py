@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 
 def DTWDistance(s1, s2, w=None):
     '''

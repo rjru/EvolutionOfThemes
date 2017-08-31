@@ -37,7 +37,12 @@ def getMatrixDist(docsThemesOrdened, distance_method):
 
     for v1 in range(0, lenMuesta):
         for v2 in range(0, lenMuesta):
-            dis_matrix[v1][v2] = distance_method(docsThemesOrdened[v1], docsThemesOrdened[v2])
+            if v1 == v2:
+                dis_matrix[v1][v2] = 0
+            if v1 < v2:
+                dist_temp = distance_method(docsThemesOrdened[v1], docsThemesOrdened[v2])
+                dis_matrix[v1][v2] = dist_temp
+                dis_matrix[v2][v1] = dist_temp
 
     return dis_matrix
 
@@ -119,9 +124,9 @@ if __name__ == '__main__':
                  }
 
 
-    rootedTree = EteTreeToBinaryTree(t, metaDoc, metaTheme) # since now, we use only themes
+    rootedTree = EteTreeToBinaryTree(t) # since now, we use only themes
     radialLayout(rootedTree)
-    jsonTree = treeToJson(rootedTree, metaDoc)
+    jsonTree = treeoJson(rootedTree, metaDoc, metaTheme)
     jsonfile = open("res.json", 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)

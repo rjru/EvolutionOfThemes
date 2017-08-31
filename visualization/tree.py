@@ -15,25 +15,26 @@ class BinaryTree:
         self.leftChild = None
         self.rightChild = None
         self.root = None
-        self.distributionTheme = None if rootObj[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(rootObj)]
+        #self.distributionTheme = None if rootObj[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(rootObj)]
+        #self.topicsSumary = None if rootObj[0] == "i" else metaTheme["topicsSumary"][metaTheme["nameThemes"].index(rootObj)]
 
-    def insertLeft(self, newNode, weightAristToParent, metaTheme):
+    def insertLeft(self, newNode, weightAristToParent):
         parent = self
         if self.leftChild == None:
-            self.leftChild = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
+            self.leftChild = BinaryTree(newNode, weightAristToParent, 1, parent)
             self.deg = self.deg + 1
         else:
-            t = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
+            t = BinaryTree(newNode, weightAristToParent, 1, parent)
             t.leftChild = self.leftChild
             self.leftChild = t
 
-    def insertRight(self, newNode, weightAristToParent, metaTheme):
+    def insertRight(self, newNode, weightAristToParent):
         parent = self
         if self.rightChild == None:
-            self.rightChild = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
+            self.rightChild = BinaryTree(newNode, weightAristToParent, 1, parent)
             self.deg = self.deg + 1
         else:
-            t = BinaryTree(newNode, weightAristToParent, 1, parent, metaTheme)
+            t = BinaryTree(newNode, weightAristToParent, 1, parent)
             t.rightChild = self.rightChild
             self.rightChild = t
 
@@ -85,6 +86,10 @@ class BinaryTree:
     def getDistributionTheme(self):
         return self.distributionTheme
 
+    def getTopicsSumary(self):
+        return self.topicsSumary
+
+
 def preorder(tree):
     if tree:
         print(tree.getRootVal())
@@ -97,27 +102,24 @@ def postorder(tree):
         postorder(tree.getRightChild())
         print(tree.getRootVal())
 
-def insertRecursive(tree, rootedTree, metaDoc, metaTheme):
+def insertRecursive(tree, rootedTree):
     if tree:  # arbol original
         lenChild = len(tree.get_children())
         if lenChild == 1:
             rootedTree.insertRight(tree.get_children()[0].name,
                                    tree.get_children()[0].dist,
-                                   metaTheme
                                    )
-            insertRecursive(tree.get_children()[0], rootedTree.getRightChild(), metaDoc, metaTheme)
+            insertRecursive(tree.get_children()[0], rootedTree.getRightChild())
 
         if lenChild == 2:
             rootedTree.insertRight(tree.get_children()[0].name,
                                    tree.get_children()[0].dist,
-                                   metaTheme
                                    )
             rootedTree.insertLeft(tree.get_children()[1].name,
                                   tree.get_children()[1].dist,
-                                  metaTheme
                                   )
-            insertRecursive(tree.get_children()[0], rootedTree.getRightChild(), metaDoc, metaTheme)
-            insertRecursive(tree.get_children()[1], rootedTree.getLeftChild(), metaDoc, metaTheme)
+            insertRecursive(tree.get_children()[0], rootedTree.getRightChild())
+            insertRecursive(tree.get_children()[1], rootedTree.getLeftChild())
 
 def setNamesTree(t):
     cont = 0
@@ -129,13 +131,13 @@ def setNamesTree(t):
             node.name = "i_" + node.name + '_' + str(cont)
         cont = cont + 1
 
-def EteTreeToBinaryTree(t, metaDoc, metaTheme):
+def EteTreeToBinaryTree(t):
     print('set Names')
     setNamesTree(t)
 
     print('insert recursive')
-    rootedTree = BinaryTree(t.name, metaTheme=metaTheme)
-    insertRecursive(t, rootedTree, metaDoc, metaTheme)
+    rootedTree = BinaryTree(t.name)
+    insertRecursive(t, rootedTree)
     return rootedTree
 
 

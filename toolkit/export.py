@@ -37,13 +37,13 @@ def matrix_to_pex(name, matrix_dist, list_namefiles):
         f.write("\n")
     f.close()  # you can omit in most cases as the destructor will call it
 
-def getTopDistribution(tree, threshold):
+def getTopDistribution(distribution, threshold):
     topDitribution = {}
 
-    if tree.getDistributionTheme() is not None:
-        for i in range(0, len(tree.getDistributionTheme())):
-            if tree.getDistributionTheme()[i] > threshold:
-                topDitribution[str(i)] = tree.getDistributionTheme()[i]
+    if distribution is not None:
+        for i in range(0, len(distribution)):
+            if distribution[i] > threshold:
+                topDitribution[str(i)] = distribution[i]
         #  dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme()))
     else:
         topDitribution = ""
@@ -51,16 +51,25 @@ def getTopDistribution(tree, threshold):
     return topDitribution
 
 # to format json
-def nodesToJson(tree, nodes):
-    constOf = 10 # constante para multiplicar las distancias porque son muy pequeñas
+def nodesToJson(tree, nodes, metaTheme):
+
+    constOf = 10  # constante para multiplicar las distancias porque son muy pequeñas
     if tree != None:
-        nodesToJson(tree.getLeftChild(), nodes)
-        nodesToJson(tree.getRightChild(), nodes)
+        nodesToJson(tree.getLeftChild(), nodes, metaTheme)
+        nodesToJson(tree.getRightChild(), nodes, metaTheme)
         #print(tree.getRootVal())
         # 'Yes' if fruit == 'Apple' else 'No'
+        distributionTheme = None if tree.getRootVal()[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(tree.getRootVal())]
+        topicsSumary = None if tree.getRootVal()[0] == "i" else metaTheme["topicsSumary"][metaTheme["nameThemes"].index(tree.getRootVal())]
+
         nodes.append({"data": {"id": tree.getRootVal(),
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
-                               "topDistribution": getTopDistribution(tree, 0.001)  # getTopDistribution(tree, umbral)
+                               "topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
+                               "param_1": topicsSumary[1] if topicsSumary else "",
+                               "param_2": topicsSumary[2] if topicsSumary else "",
+                               "param_3": topicsSumary[3] if topicsSumary else "",
+                               "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
+                               "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else ""
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
                       }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
@@ -80,10 +89,10 @@ def edgesToJson(tree, edges):
         edgesToJson(tree.getRightChild(), edges)
     return edges
 
-def treeToJson(rootedTree, metaDoc):
+def treeToJson(rootedTree, metaDoc, metaTheme):
     #print('nodes json')
     nodes = []
-    nodesJs = nodesToJson(rootedTree, nodes)
+    nodesJs = nodesToJson(rootedTree, nodes, metaTheme)
     #print('edges json')
     edges = []
     edgesJs = edgesToJson(rootedTree, edges)
