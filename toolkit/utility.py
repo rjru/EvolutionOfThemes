@@ -10,6 +10,7 @@ import sys;
 import shutil;
 import math;
 from ete3 import Tree
+import seaborn as sns
 
 NOT_FOLD = True;
 #===============================================================================
@@ -211,6 +212,20 @@ def newick_to_pairwise_nodes(newick_string):
 
 # adecuacion del formato newick para utilizar el layout
 
+def scale_colors(parts): # hace lo mismo que get_color_of_n pero usando una libreria
+#http://seaborn.pydata.org/tutorial/color_palettes.html
+    palette = sns.color_palette("cubehelix", parts)
+    #palette = sns.cubehelix_palette(parts)
+    #palette = sns.color_palette("Reds",parts) # esto es escala rgb del 0 al 1
+    # aqui se convierte de 0 a 255
+    palette_0_255 = []
+    for color in palette:
+        r = int(color[0]*255)
+        g = int(color[1]*255)
+        b = int(color[2]*255)
+        palette_0_255.append((r, g, b))
+
+    return palette_0_255
 
 if __name__ == '__main__':
     pass

@@ -44,19 +44,19 @@ def getTopDistribution(distribution, threshold):
         for i in range(0, len(distribution)):
             if distribution[i] > threshold:
                 topDitribution[str(i)] = distribution[i]
-        #  dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme()))
+          #dict(zip([str(i) for i in range(0, len(tree.getDistributionTheme()))], tree.getDistributionTheme()))
     else:
         topDitribution = ""
 
     return topDitribution
 
 # to format json
-def nodesToJson(tree, nodes, metaTheme):
+def nodesToJsonPubmed(tree, nodes, metaTheme):
 
     constOf = 10  # constante para multiplicar las distancias porque son muy pequeñas
     if tree != None:
-        nodesToJson(tree.getLeftChild(), nodes, metaTheme)
-        nodesToJson(tree.getRightChild(), nodes, metaTheme)
+        nodesToJsonPubmed(tree.getLeftChild(), nodes, metaTheme)
+        nodesToJsonPubmed(tree.getRightChild(), nodes, metaTheme)
         #print(tree.getRootVal())
         # 'Yes' if fruit == 'Apple' else 'No'
         distributionTheme = None if tree.getRootVal()[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(tree.getRootVal())]
@@ -78,10 +78,10 @@ def nodesToJson(tree, nodes, metaTheme):
 def edgesToJson(tree, edges):
     #if tree != None:
     if tree.getLeftChild() != None:
-        edges.append({"data": {"id": len(edges), "source": tree.getLeftChild().getParent().getRootVal(), "target": tree.getLeftChild().getRootVal(), "length": 10*tree.getLeftChild().getweightAristToParentVal()}})
+        edges.append({"data": {"id": "edge"+str(len(edges)), "source": tree.getLeftChild().getParent().getRootVal(), "target": tree.getLeftChild().getRootVal(), "length": 10*tree.getLeftChild().getweightAristToParentVal()}})
         edgesToJson(tree.getLeftChild(), edges)
     if tree.getRightChild() != None:
-        edges.append({"data": {"id": len(edges),
+        edges.append({"data": {"id": "edge"+str(len(edges)),
                                "source": tree.getRightChild().getParent().getRootVal(),
                                "target": tree.getRightChild().getRootVal(),
                                "length": 10*tree.getRightChild().getweightAristToParentVal()
@@ -89,10 +89,10 @@ def edgesToJson(tree, edges):
         edgesToJson(tree.getRightChild(), edges)
     return edges
 
-def treeToJson(rootedTree, metaDoc, metaTheme):
+def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
     #print('nodes json')
     nodes = []
-    nodesJs = nodesToJson(rootedTree, nodes, metaTheme)
+    nodesJs = nodesToJsonPubmed(rootedTree, nodes, metaTheme)
     #print('edges json')
     edges = []
     edgesJs = edgesToJson(rootedTree, edges)
@@ -110,5 +110,31 @@ def treeToJson(rootedTree, metaDoc, metaTheme):
         metaDoc["pubmed"].docs[str(idDoc)] = metaDoc["pubmed"].docs.pop(idDoc)
 
     jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs}
+
+    return str(jsonTree).replace("'", '"')
+
+def nodesToJsonTimeSeries(tree, nodes, vectorTS, label_group, scalaColor):
+
+    constOf = 10  # constante para multiplicar las distancias porque son muy pequeñas
+    if tree != None:
+        nodesToJsonTimeSeries(tree.getLeftChild(), nodes, vectorTS, label_group, scalaColor)
+        nodesToJsonTimeSeries(tree.getRightChild(), nodes, vectorTS, label_group, scalaColor)
+
+        nodes.append({"data": {"id": tree.getRootVal(),
+                               "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
+                                "vectorTS": "" if tree.getRootVal()[0] == "i" else dict(zip([str(i) for i in range(0, len(vectorTS[int(tree.getRootVal())]))], vectorTS[int(tree.getRootVal())])),
+                               "class": "grey" if tree.getRootVal()[0] == "i" else "rgb"+str(scalaColor[int(label_group[int(tree.getRootVal())])-1])
+                               },
+                      "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
+                      }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
+    return nodes
+
+def treeToJsonTimeSeries(rootedTree, vectorTS, label_group, scalaColor):
+    nodes = []
+    nodesJs = nodesToJsonTimeSeries(rootedTree, nodes, vectorTS, label_group, scalaColor)
+    edges = []
+    edgesJs = edgesToJson(rootedTree, edges)
+
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs}
 
     return str(jsonTree).replace("'", '"')
