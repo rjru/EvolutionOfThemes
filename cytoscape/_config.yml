@@ -1,0 +1,24 @@
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+
+# Setup
+title:               Cytoscape.js
+tagline:             News and tutorials
+url:                 http://blog.js.cytoscape.org
+baseurl:             ""
+paginate:            5
+excerpt_separator:   <!--more-->
+
+# About/contact
+author:
+  name:              Cytoscape.js
+  url:               http://js.cytoscape.org
+
+# Project info
+project:
+  home:              http://js.cytoscape.org
+  repo:              https://github.com/cytoscape/cytoscape.js
+  twitter:           https://twitter.com/cytoscape
+  stackoverflow:     http://stackoverflow.com/questions/tagged/cytoscape.js
