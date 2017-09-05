@@ -214,7 +214,7 @@ def newick_to_pairwise_nodes(newick_string):
 
 def scale_colors(parts): # hace lo mismo que get_color_of_n pero usando una libreria
 #http://seaborn.pydata.org/tutorial/color_palettes.html
-    palette = sns.color_palette("cubehelix", parts)
+    palette = sns.color_palette("Set2", parts) #cubehelix
     #palette = sns.cubehelix_palette(parts)
     #palette = sns.color_palette("Reds",parts) # esto es escala rgb del 0 al 1
     # aqui se convierte de 0 a 255
