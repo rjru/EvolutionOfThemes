@@ -1,1 +1,0 @@
-chrome --allow-file-access-from-files file:///C:/Users/rbrto-pc/Desktop/cytoscape.js-blog-gh-pages/getting-started/cyto.json
