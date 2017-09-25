@@ -37,14 +37,12 @@ xmax, xmin = ts_dataset_vis.max(), ts_dataset_vis.min()
 ts_dataset_vis = (ts_dataset_vis - xmin)/(xmax - xmin)
 # fin de normalización no esta hecho por files o columnas, esta hecho la matriz como conjunto
 
-
-'''
-name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders"]
+#name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders", "none"]
+name_ts_reduction = ["none"]
 for nametec in name_ts_reduction:
     ts_dataset_reduce = dimensional_reduction(ts_dataset, nametec, 30)
     # normalizamos
-
-    dis_matrix = getMatrixDist(ts_dataset_reduce, DTWDistance)
+    dis_matrix = getMatrixDist(ts_dataset_reduce, dist_euclidean)
     t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
@@ -53,11 +51,11 @@ for nametec in name_ts_reduction:
     scalaColor = scale_colors(6)
     #print(scalaColor)
     jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaColor)
-    jsonfile = open("res_syn_ctrl_"+nametec+"_30_"+"dtw_300.json", 'w')
+    jsonfile = open("res_syn_ctrl_"+nametec+"_30_"+"eucli_300.json", 'w')
     # print(jsonTree)
     jsonfile.write(jsonTree)
-'''
 
+'''
 # sin reduccion de dimensionalidad
 dis_matrix = getMatrixDist(ts_dataset_norm, DTWDistance)
 t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
@@ -71,3 +69,4 @@ jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaCo
 jsonfile = open("C:/Users/rbrto-pc/Google Drive/citation_lda/src/cytoscape/main_visual/data/syntetic_control_300.json", 'w')
 # print(jsonTree)
 jsonfile.write(jsonTree)
+'''

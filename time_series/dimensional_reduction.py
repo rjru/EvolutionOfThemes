@@ -7,6 +7,8 @@ from time_series.paa import *
 from time_series.svd import *
 
 def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
+    if nameTecnique == "none":
+        ts_dataset_reduce = ts_dataset
 
     if nameTecnique == "dct":
         dcost = DCT()
@@ -14,7 +16,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # dcost.load_data('dataset.csv')
         # dcost.shuffle_data()
         # dcost.normalize()
-        dcost.standardize()
+        #dcost.standardize()
         dcost.execute_dct(num_dim)  # put the desired dimension
         # dcost.sort_coefficients()
         # dcost.save_activations(filename+'_'+str(i+1)+'.csv')
@@ -30,7 +32,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # dwt.load_data('dataset.csv')
         # dwt.shuffle_data()
         # dwt.normalize(-1,1)
-        dwt.standardize()
+        #dwt.standardize()
         dwt.execute_dwt(num_dim)  # put the desired dimension
         # dwt.sort_coefficients()
         # dwt.save_activations(filename + '_' + str(i + 1) + '.csv')
@@ -43,7 +45,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # autoe.load_data('dataset.csv')
         # autoe.shuffle_data()
         # autoe.normalize(-1,1)
-        autoe.standardize()
+        #autoe.standardize()
         autoe.divide_data(0.8)
         autoe.create_autoencoder(num_dim)  # put the desired dimension
         # autoe.normalize() # best results of clustering for interval [0, 1]
@@ -67,7 +69,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # cp.load_data('dataset.csv')
         # cp.shuffle_data()
         # cp.normalize(-1.0, 1.0)
-        cp.standardize()
+        #cp.standardize()
         cp.execute_cp(num_dim)
         # cp.sort_coefficients()
         # cp.save_activations(filename + '_' + str(i + 1) + '.csv')
@@ -79,7 +81,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # paa.load_data('dataset.csv')
         # paa.shuffle_data()
         # paa.normalize()
-        paa.standardize()
+        #paa.standardize()
         paa.execute_paa(num_dim)
         # paa.sort_coefficients()
         # paa.save_activations(filename + '_' + str(i + 1) + '.csv')
@@ -92,7 +94,7 @@ def dimensional_reduction(ts_dataset, nameTecnique, num_dim):
         # svd.load_data('dataset.csv')
         # svd.shuffle_data()
         # svd.normalize()
-        svd.standardize()
+        #svd.standardize()
         # svd.s1()
         svd.run_svd(num_dim)
         # svd.sort_coefficients()
