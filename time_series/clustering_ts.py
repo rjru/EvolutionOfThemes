@@ -8,10 +8,18 @@ from sklearn import preprocessing
 carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive_2015/"
 #source_data_test = "synthetic_control/synthetic_control_TEST"
 #source_data_train = "synthetic_control/synthetic_control_TRAIN"
-source_data_test = "MedicalImages/MedicalImages_TEST"
-source_data_train = "MedicalImages/MedicalImages_TRAIN"
-dataset_name = "MedImg"
-number_class = 10
+
+#source_data_test = "MedicalImages/MedicalImages_TEST"
+#source_data_train = "MedicalImages/MedicalImages_TRAIN"
+#dataset_name = "MedImg"
+#number_class = 10
+
+source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
+source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
+dataset_name = "TwoLeadECG"
+number_class = 2
+
+
 
 data_test = csv.reader(open(carpet_dataset+source_data_test), delimiter=',')
 data_train = csv.reader(open(carpet_dataset+source_data_train), delimiter=',')
@@ -55,7 +63,7 @@ for nametec in name_ts_reduction:
     scalaColor = scale_colors(number_class)
     #print(scalaColor)
     jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaColor)
-    jsonfile = open(dataset_name+"_"+nametec+"_50_"+"eucli_train.json", 'w')
+    jsonfile = open(dataset_name+"_"+nametec+"__"+"DTW_train.json", 'w')
     # print(jsonTree)
     jsonfile.write(jsonTree)
 
