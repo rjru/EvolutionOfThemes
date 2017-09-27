@@ -6,6 +6,7 @@ import numpy as np
 from sklearn import preprocessing
 
 carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive_2015/"
+
 #source_data_test = "synthetic_control/synthetic_control_TEST"
 #source_data_train = "synthetic_control/synthetic_control_TRAIN"
 
@@ -14,12 +15,32 @@ carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive
 #dataset_name = "MedImg"
 #number_class = 10
 
-source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
-source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
-dataset_name = "TwoLeadECG"
-number_class = 2
+#source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
+#source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
+#dataset_name = "TwoLeadECG"
+#number_class = 2
 
+#source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
+#source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
+#dataset_name = "TwoLeadECG"
+#number_class = 2
 
+#dataset_name = "CBF"
+#number_class = 3
+#source_data_test = dataset_name+"/"+dataset_name+"_TEST"
+#source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
+
+#dataset_name = "Trace"
+#number_class = 4
+#source_data_test = dataset_name+"/"+dataset_name+"_TEST"
+#source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
+
+dataset_name = "FaceFour"
+number_class = 4
+source_data_test = dataset_name+"/"+dataset_name+"_TEST"
+source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
+
+#Plane, coffee, DiatomSizeReduction, FacesUCR, ItalyPowerDemand, Symbols, Meat
 
 data_test = csv.reader(open(carpet_dataset+source_data_test), delimiter=',')
 data_train = csv.reader(open(carpet_dataset+source_data_train), delimiter=',')
