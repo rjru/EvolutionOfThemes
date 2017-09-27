@@ -6,12 +6,10 @@ import numpy as np
 from sklearn import preprocessing
 
 carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive_2015/"
+carpet_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/cytoscape/main_visual/data/"
 
-#source_data_test = "synthetic_control/synthetic_control_TEST"
-#source_data_train = "synthetic_control/synthetic_control_TRAIN"
-
-dataset_name = "Meat"
-number_class = 3
+dataset_name = "DiatomSizeReduction"
+number_class = 4
 source_data_test = dataset_name+"/"+dataset_name+"_TEST"
 source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
 
@@ -20,19 +18,18 @@ source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
 data_test = csv.reader(open(carpet_dataset+source_data_test), delimiter=',')
 data_train = csv.reader(open(carpet_dataset+source_data_train), delimiter=',')
 
-label_group = []
-ts_dataset = []
-
-
 def standardize(dataset):
     data = dataset.T
     data_norm = preprocessing.scale(data)
     dataset = data_norm.T
     return dataset
 
-#for row in data_test:
-#    label_group.append(row[0])
-#    ts_dataset.append([float(i) for i in row[1:]])
+label_group = []
+ts_dataset = []
+
+for row in data_test:
+    label_group.append(row[0])
+    ts_dataset.append([float(i) for i in row[1:]])
 
 for row in data_train:
     label_group.append(row[0])
@@ -50,7 +47,7 @@ name_ts_reduction = ["none"]
 for nametec in name_ts_reduction:
     ts_dataset_reduce = dimensional_reduction(ts_dataset, nametec, 50)
     # normalizamos
-    dis_matrix = getMatrixDist(ts_dataset_reduce, DTWDistance)  # DTWDistance dist_euclidean
+    dis_matrix = getMatrixDist(ts_dataset_reduce, dist_euclidean)  # DTWDistance dist_euclidean
     t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
@@ -59,22 +56,6 @@ for nametec in name_ts_reduction:
     scalaColor = scale_colors(number_class)
     #print(scalaColor)
     jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaColor)
-    jsonfile = open(dataset_name+"_"+nametec+"__"+"DTW_train.json", 'w')
+    jsonfile = open(carpet_result+dataset_name+"_"+nametec+"__"+"eucli_total.json", 'w')
     # print(jsonTree)
     jsonfile.write(jsonTree)
-
-'''
-# sin reduccion de dimensionalidad
-dis_matrix = getMatrixDist(ts_dataset_norm, DTWDistance)
-t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
-
-rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
-radialLayout(rootedTree)
-
-scalaColor = scale_colors(6)
-#print(scalaColor)
-jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaColor)
-jsonfile = open("C:/Users/rbrto-pc/Google Drive/citation_lda/src/cytoscape/main_visual/data/syntetic_control_300.json", 'w')
-# print(jsonTree)
-jsonfile.write(jsonTree)
-'''
