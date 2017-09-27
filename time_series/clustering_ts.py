@@ -41,12 +41,12 @@ xmax, xmin = ts_dataset_vis.max(), ts_dataset_vis.min()
 ts_dataset_vis = (ts_dataset_vis - xmin)/(xmax - xmin)
 # fin de normalización no esta hecho por files o columnas, esta hecho la matriz como conjunto
 
-name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders"]
-#name_ts_reduction = ["none"]
+#name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders"]
+name_ts_reduction = ["none"]
 for nametec in name_ts_reduction:
     ts_dataset_reduce = dimensional_reduction(ts_dataset, nametec, 50)
     # normalizamos
-    dis_matrix = getMatrixDist(ts_dataset_reduce, dist_euclidean)
+    dis_matrix = getMatrixDist(ts_dataset_reduce, DTWDistance)  # DTWDistance dist_euclidean
     t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
