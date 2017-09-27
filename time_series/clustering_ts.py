@@ -6,8 +6,12 @@ import numpy as np
 from sklearn import preprocessing
 
 carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive_2015/"
-source_data_test = "synthetic_control/synthetic_control_TEST"
-source_data_train = "synthetic_control/synthetic_control_TRAIN"
+#source_data_test = "synthetic_control/synthetic_control_TEST"
+#source_data_train = "synthetic_control/synthetic_control_TRAIN"
+source_data_test = "MedicalImages/MedicalImages_TEST"
+source_data_train = "MedicalImages/MedicalImages_TRAIN"
+dataset_name = "MedImg"
+number_class = 10
 
 data_test = csv.reader(open(carpet_dataset+source_data_test), delimiter=',')
 data_train = csv.reader(open(carpet_dataset+source_data_train), delimiter=',')
@@ -37,10 +41,10 @@ xmax, xmin = ts_dataset_vis.max(), ts_dataset_vis.min()
 ts_dataset_vis = (ts_dataset_vis - xmin)/(xmax - xmin)
 # fin de normalización no esta hecho por files o columnas, esta hecho la matriz como conjunto
 
-#name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders", "none"]
-name_ts_reduction = ["none"]
+name_ts_reduction = ["dct", "dwt", "svd", "cp", "paa", "autoenoders"]
+#name_ts_reduction = ["none"]
 for nametec in name_ts_reduction:
-    ts_dataset_reduce = dimensional_reduction(ts_dataset, nametec, 30)
+    ts_dataset_reduce = dimensional_reduction(ts_dataset, nametec, 50)
     # normalizamos
     dis_matrix = getMatrixDist(ts_dataset_reduce, dist_euclidean)
     t = njWithRoot(dis_matrix, [i for i in range(0, len(ts_dataset))])
@@ -48,10 +52,10 @@ for nametec in name_ts_reduction:
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
     radialLayout(rootedTree)
 
-    scalaColor = scale_colors(6)
+    scalaColor = scale_colors(number_class)
     #print(scalaColor)
     jsonTree = treeToJsonTimeSeries(rootedTree, ts_dataset_vis, label_group, scalaColor)
-    jsonfile = open("res_syn_ctrl_"+nametec+"_30_"+"eucli_300.json", 'w')
+    jsonfile = open(dataset_name+"_"+nametec+"_50_"+"eucli_train.json", 'w')
     # print(jsonTree)
     jsonfile.write(jsonTree)
 
