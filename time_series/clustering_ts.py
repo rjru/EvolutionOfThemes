@@ -10,33 +10,8 @@ carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive
 #source_data_test = "synthetic_control/synthetic_control_TEST"
 #source_data_train = "synthetic_control/synthetic_control_TRAIN"
 
-#source_data_test = "MedicalImages/MedicalImages_TEST"
-#source_data_train = "MedicalImages/MedicalImages_TRAIN"
-#dataset_name = "MedImg"
-#number_class = 10
-
-#source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
-#source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
-#dataset_name = "TwoLeadECG"
-#number_class = 2
-
-#source_data_test = "TwoLeadECG/TwoLeadECG_TEST"
-#source_data_train = "TwoLeadECG/TwoLeadECG_TRAIN"
-#dataset_name = "TwoLeadECG"
-#number_class = 2
-
-#dataset_name = "CBF"
-#number_class = 3
-#source_data_test = dataset_name+"/"+dataset_name+"_TEST"
-#source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
-
-#dataset_name = "Trace"
-#number_class = 4
-#source_data_test = dataset_name+"/"+dataset_name+"_TEST"
-#source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
-
-dataset_name = "FaceFour"
-number_class = 4
+dataset_name = "Plane"
+number_class = 7
 source_data_test = dataset_name+"/"+dataset_name+"_TEST"
 source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
 
