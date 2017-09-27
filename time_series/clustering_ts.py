@@ -10,8 +10,8 @@ carpet_dataset = "C:/Users/rbrto-pc/Documents/DATASETS_TIMESERIES/UCR_TS_Archive
 #source_data_test = "synthetic_control/synthetic_control_TEST"
 #source_data_train = "synthetic_control/synthetic_control_TRAIN"
 
-dataset_name = "Plane"
-number_class = 7
+dataset_name = "FacesUCR"
+number_class = 14
 source_data_test = dataset_name+"/"+dataset_name+"_TEST"
 source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
 
