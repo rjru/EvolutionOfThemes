@@ -18,8 +18,8 @@ $("#result_from").change(function () {
 			            //'label': 'data(label)',
 			            //'width': '0.5px',
 			            //'height': '0.5px',
-			            'width': '0.08em',
-			            'height': '0.08em',
+			            'width': '0.02em',
+			            'height': '0.02em',
 			            'color': 'yellow',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
@@ -57,7 +57,7 @@ $("#result_from").change(function () {
 			            'text-background-color': 'yellow',
 			            'text-background-opacity': 0.4,
 			            //'width': '0.05em',
-			            'width': '0.006em',
+			            'width': '0.001em',
 			            'control-point-step-size': '0.3em',
 			            'line-color': 'black'
 			             }
