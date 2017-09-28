@@ -57,7 +57,7 @@ $("#result_from").change(function () {
 			            'text-background-color': 'yellow',
 			            'text-background-opacity': 0.4,
 			            //'width': '0.05em',
-			            'width': '0.0015em',
+			            'width': '0.006em',
 			            'control-point-step-size': '0.3em',
 			            'line-color': 'black'
 			             }
