@@ -43,7 +43,7 @@ def preorder_traversal(v, l_root):
         preorder_traversal(wl, l_root)
 
 def radialLayout(rtree):
-    print('hello tree')
+    print('hello radial layout')
     postorder_traversal(rtree)
     rtree.setX((0, 0))
     rtree.setW(360)

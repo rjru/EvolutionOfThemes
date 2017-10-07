@@ -1,6 +1,9 @@
 import math
 import numpy as np
 
+def hellinger(p, q, dist=None):
+    return np.sqrt(np.sum((np.sqrt(p) - np.sqrt(q)) ** 2)) / np.sqrt(2), 0
+
 def DTWDistance(s1, s2, w=None):
     '''
     Calculates dynamic time warping Euclidean distance between two
@@ -35,7 +38,8 @@ def DTWDistance(s1, s2, w=None):
 
     return np.sqrt(DTW[len(s1) - 1, len(s2) - 1])
 
-def dist_euclidean(v1, v2):
+
+def dist_euclidean(v1, v2, dist=None):
     dist = [(a - b)**2 for a, b in zip(v1, v2)]
     dist = math.sqrt(sum(dist))
-    return dist
+    return dist, 0

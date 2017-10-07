@@ -5,30 +5,31 @@
 $("#result_from").change(function () {
 	  var namefile = $("#result_from :selected").attr('value');
 	  console.log(namefile)
-	  $.ajax({dataType:"json", url: "https://raw.githubusercontent.com/rjru/EvolutionOfThemes/master/cytoscape/main_visual/data/"+namefile, success: function(result){
+	  $.ajax({dataType:"json", url: "../../clustering_process/result/"+namefile, success: function(result){
+	  console.log(result)
 			  var cy = cytoscape({
 			  container: document.getElementById('cy'),
+			  layout: {
+			            name: 'preset'
+			            },
 			  elements: result,
 			  // so we can see the ids
-			  style: 
+			  style:
 			  [
 			    {
 			      selector: 'node',
 			      style:{
-			            //'label': 'data(label)',
-			            //'width': '0.5px',
-			            //'height': '0.5px',
-			            'width': '0.08em',
-			            'height': '0.08em',
-			            'color': 'yellow',
+			            'label': 'data(yearTheme)',
+			            'width': '2em',
+			            'height': '2em',
+			            'color': 'black',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
 			            'border-style': 'solid',
-			            'border-width': '0.0002em',
+			            'border-width': '0.5em',
 			            'border-color': 'white',
-			            //'font-size' : '0.5px',
-			            'font-size' : '0.02em',
-			            'background-color': 'data(class)'
+			            'font-size' : '2em',
+			            'background-color': 'blue'//'data(class)'
 			      		}
 			    },
 			    {
@@ -56,14 +57,13 @@ $("#result_from").change(function () {
 
 			            'text-background-color': 'yellow',
 			            'text-background-opacity': 0.4,
-			            //'width': '0.05em',
-			            'width': '0.0015em',
+			            'width': '0.5em',
 			            'control-point-step-size': '0.3em',
 			            'line-color': 'black'
 			             }
 			    }
 			  ],
-
+                /*
 			  layout: {
 			          name: 'preset',
 			          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
@@ -77,8 +77,10 @@ $("#result_from").change(function () {
 			          animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
 			          ready: undefined, // callback on layoutready
 			          stop: undefined, // callback on layoutstop
-			          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts 
+			          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts
 			      	  }
+			      	  // */
+
 			      //layout:{defaults}
 			}); // fin citoscape
 
@@ -87,49 +89,41 @@ $("#result_from").change(function () {
 
 			var defaults = {
 			  name: 'cola',
-			  animate: true, // whether to show the layout as it's running [si desea mostrar el diseño que se está ejecutando]
-			  refresh: 0.5, // number of ticks per frame; higher is faster but more jerky [número de instantes por cuadro; más alto es más rápido pero más desigual]
-			  maxSimulationTime: 400000, // max length in ms to run the layout
-			  ungrabifyWhileSimulating: false, // so you can't drag nodes during layout
-			  fit: false, // on every layout reposition of nodes, fit the viewport [en cada reposición de los nodos, ajuste la ventana de visualización]
-			  padding: 30, // padding around the simulation
-			  boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+              animate: true, // whether to show the layout as it's running
+              refresh: 1, // number of ticks per frame; higher is faster but more jerky
+              maxSimulationTime: 4000, // max length in ms to run the layout
+              ungrabifyWhileSimulating: false, // so you can't drag nodes during layout
+              fit: true, // on every layout reposition of nodes, fit the viewport
+              padding: 30, // padding around the simulation
+              boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+              nodeDimensionsIncludeLabels: undefined, // whether labels should be included in determining the space used by a node (default true)
 
-			  // layout event callbacks
-			  ready: function(){}, // on layoutready
-			  stop: function(){}, // on layoutstop
+              // layout event callbacks
+              ready: function(){}, // on layoutready
+              stop: function(){}, // on layoutstop
 
-			  // positioning options
-			  randomize: false, // use random node positions at beginning of layout
-			  avoidOverlap: true, // if true, prevents overlap of node bounding boxes
-			  handleDisconnected: true, // if true, avoids disconnected components from overlapping [si es cierto, evita que los componentes desconectados se superpongan]
-			  nodeSpacing: function( node ){ return 10; }, // extra spacing around nodes
-			  flow: undefined, // use DAG/tree flow layout if specified, e.g. { axis: 'y', minSeparation: 30 }
-			  alignment: undefined, // relative alignment constraints on nodes, e.g. function( node ){ return { x: 0, y: 1 } }
+              // positioning options
+              randomize: false, // use random node positions at beginning of layout
+              avoidOverlap: true, // if true, prevents overlap of node bounding boxes
+              handleDisconnected: true, // if true, avoids disconnected components from overlapping
+              nodeSpacing: function( node ){ return 10; }, // extra spacing around nodes
+              flow: undefined, // use DAG/tree flow layout if specified, e.g. { axis: 'y', minSeparation: 30 }
+              alignment: undefined, // relative alignment constraints on nodes, e.g. function( node ){ return { x: 0, y: 1 } }
 
-			  // different methods of specifying edge length
-			  // each can be a constant numerical value or a function like `function( edge ){ return 2; }`
-			  edgeLength: undefined, // sets edge length directly in simulation
-			    /*
-			  edgeLength: function( edge )
-			  {
-			    console.log(edge.data('length'))
-			    var len = parseInt(edge.data('length'));
-			    return len; 
-			  },
-			  // */
-			  edgeSymDiffLength: undefined, // symmetric diff edge length in simulation [longitud del borde de simetría en simulación]
-			  edgeJaccardLength: undefined, // jaccard edge length in simulation
+              // different methods of specifying edge length
+              // each can be a constant numerical value or a function like `function( edge ){ return 2; }`
+              edgeLength: undefined, // sets edge length directly in simulation
+              edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
+              edgeJaccardLength: undefined, // jaccard edge length in simulation
 
-			  // iterations of cola algorithm; uses default values on undefined
-			  unconstrIter: undefined, // unconstrained initial layout iterations
-			  userConstIter: undefined, // initial layout iterations with user-specified constraints
-			  allConstIter: undefined, // initial layout iterations with all constraints including non-overlap
+              // iterations of cola algorithm; uses default values on undefined
+              unconstrIter: undefined, // unconstrained initial layout iterations
+              userConstIter: undefined, // initial layout iterations with user-specified constraints
+              allConstIter: undefined, // initial layout iterations with all constraints including non-overlap
 
-			  // infinite layout options
-			  infinite: true, // overrides all other options for a forces-all-the-time mode
-			  transform: function (node, position ){ return position; } // transform a given node position. Useful for changing flow direction in discrete layouts 
-			};
+              // infinite layout options
+              infinite: false // overrides all other options for a forces-all-the-time mode
+  };
 
 			var options = {
 			  name: 'cose',
@@ -139,7 +133,7 @@ $("#result_from").change(function () {
 
 			  // Called on `layoutstop`
 			  stop: function(){},
-			  
+
 			  // Whether to animate while running the layout
 			  // true : Animate continuously as the layout is running
 			  // false : Just show the end result
@@ -219,9 +213,9 @@ $("#result_from").change(function () {
 			};
 
 			//cy.add(data)
-			cy.center();
+            cy.center();
+		    //cy.layout(options);
 
-			//cy.layout(defaults);
 
 			cy.nodes().forEach(function(ele) {
 			        ele.qtip({
@@ -250,29 +244,29 @@ $("#result_from").change(function () {
 			}
 
 			cy.on('click', 'node', function(evt){
-			      ts = this.data("vectorTS");
+			      ts = this.data("topDistribution");
 			      console.log(ts);
 			      ///*
 			      $("#tss").html('');
 			  var graph = new Rickshaw.Graph( {
-			      element: document.querySelector("#tss"), 
-			      width: 150, 
-			      height: 50, 
+			      element: document.querySelector("#tss"),
+			      width: 150,
+			      height: 50,
 			      series: [{
 			          color: 'steelblue',
 			          data: setFormat(ts)
 			      }]
-			  }); 
+			  });
 
 			  graph.render();
-			  // */ 
+			  // */
 			}); // fin click
 
 			$('#config-toggle').on('click', function(){
 			  $('body').toggleClass('config-closed');
 			  cy.resize();
 			});
-			    
+
 	},
 	error:function (xhr, ajaxOptions, thrownError){
 	    if(xhr.status==404) {
@@ -290,68 +284,6 @@ $("#result_from").change(function () {
 	  arrayTs = [];
 	  for(e in ts){arrayTs.push({x:Number(e),y:ts[e]})}
 	  return arrayTs;
-	}   
+	}
 
     }); // fin document loaded
-  /*
-  $button.on('click', function(){
-  	$.getJSON("data/syntetic_control_600.json", function (data) {
-		var cy = cytoscape({
-  container: document.getElementById('cy'),
-  elements: data,
-  // so we can see the ids
-  style: 
-  [
-    {
-      selector: 'node',
-      style:{
-            //'label': 'data(label)',
-            //'width': '0.5px',
-            //'height': '0.5px',
-            'width': '0.015em',
-            'height': '0.015em',
-            'color': 'yellow',
-            'background-fit': 'contain',
-            'background-clip': 'none',
-            'border-style': 'solid',
-            'border-width': '0.0002em',
-            'border-color': 'white',
-            //'font-size' : '0.5px',
-            'font-size' : '0.02em',
-            'background-color': 'data(class)'
-      		}
-    },
-    {
-      selector: 'edge',
-      style: {
-            'text-background-color': 'yellow',
-            'text-background-opacity': 0.4,
-            //'width': '0.05em',
-            'width': '0.0015em',
-            'control-point-step-size': '0.3em'
-             }
-    }
-  ],
-
-  layout: {
-          name: 'preset',
-          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
-          zoom: undefined, // the zoom level to set (prob want fit = false if set)
-          pan: undefined, // the pan level to set (prob want fit = false if set)
-          fit: true, // whether to fit to viewport
-          padding: 20, // padding on fit
-          animate: true, // whether to transition the node positions
-          animationDuration: 500, // duration of animation in ms if enabled
-          animationEasing: undefined, // easing of animation if enabled
-          animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
-          ready: undefined, // callback on layoutready
-          stop: undefined, // callback on layoutstop
-          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts 
-      	  }
-      //layout:{defaults}
-		});
-  		cy.center();
-  	});
-
-  }); */
-// fin del ajax

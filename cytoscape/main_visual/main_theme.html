@@ -1,0 +1,66 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8"></meta>
+    <title>Tutorial 1: Getting Started</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="css/style.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="css/jquery.qtip.min.css" />
+
+    <script src="js/fastclick.min.js"></script>
+    <script src="js/lodash.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-slider.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src='js/jquery.qtip.min.js'></script>
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src="js/cola.js"></script>
+    <script src="js/cytoscape-cola.js"></script>
+    <script src='js/cytoscape-qtip.js'></script>
+    <script src='js/d3.min.js'></script>
+    <script src='js/d3.layout.min.js'></script>
+    <script src='js/rickshaw.min.js'></script>
+    <script src="js/code_main_theme.js"></script>
+
+
+</head>
+
+<body>
+
+    <div id="tss"></div>
+    <div id="cy"></div>
+
+    <span class="fa fa-bars config-toggle" id="config-toggle"></span>
+    <div id="config" class="config">
+      <div class="preamble">
+        <span class="label label-info">THEME EVOLUTION DISCOVERY </span>
+        <p>visualisation of Evolutionary Themes.</p>
+      </div>
+      <div class="param">
+        <div class="form-group">
+          <label form="sel1">Select Result:</label>
+            <select class="form-control" id="result_from">
+              <option value="undefined">--------</option>
+              <option value="res_theme_dtw.json">res_theme_dtw</option>
+              <option value="res_theme_eucli.json">res_theme_eucli</option>
+              <option value="res_theme_hellinger.json">res_theme_hellinger</option>
+              <option value="matrix_by_time.json">matrix_by_time</option>
+                <option value="matrix_by_time1000.json">matrix_by_time_1.000</option>
+                <option value="matrix_by_time10000.json">matrix_by_time_10.000</option>
+                <option value="matrix_by_time100000.json">matrix_by_time_100.000</option>
+                <option value="matrix_by_time1000000.json">matrix_by_time_1.000.000</option>
+
+                <option value="cont_dtw_time1000.json">cont_dtw_time1000.json</option>
+            </select>
+        </div>
+      </div>
+    </div>
+
+</body>

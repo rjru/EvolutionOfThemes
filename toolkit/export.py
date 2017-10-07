@@ -53,7 +53,7 @@ def getTopDistribution(distribution, threshold):
 # to format json
 def nodesToJsonPubmed(tree, nodes, metaTheme):
 
-    constOf = 10  # constante para multiplicar las distancias porque son muy pequeñas
+    constOf = 1500  # constante para multiplicar las distancias porque son muy pequeñas
     if tree != None:
         nodesToJsonPubmed(tree.getLeftChild(), nodes, metaTheme)
         nodesToJsonPubmed(tree.getRightChild(), nodes, metaTheme)
@@ -62,11 +62,12 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
         distributionTheme = None if tree.getRootVal()[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(tree.getRootVal())]
         topicsSumary = None if tree.getRootVal()[0] == "i" else metaTheme["topicsSumary"][metaTheme["nameThemes"].index(tree.getRootVal())]
 
+        #print(tree.getX()[0], "; ", tree.getX()[1])
         nodes.append({"data": {"id": tree.getRootVal(),
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
                                "topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
                                "param_1": topicsSumary[1] if topicsSumary else "",
-                               "param_2": topicsSumary[2] if topicsSumary else "",
+                               "yearTheme": topicsSumary[2] if topicsSumary else "",
                                "param_3": topicsSumary[3] if topicsSumary else "",
                                "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
                                "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else ""
