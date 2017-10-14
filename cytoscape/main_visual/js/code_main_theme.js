@@ -42,8 +42,8 @@ $("#result_from").change(function () {
 			      selector: 'node',
 			      style:{
 			            'label': 'data(yearTheme)',
-			            'width': '1em',
-			            'height': '1em',
+			            'width': '2em',
+			            'height': '2em',
 			            'color': 'black',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
@@ -51,7 +51,7 @@ $("#result_from").change(function () {
 			            'border-width': '0.1em',
 			            'border-color': 'gray',
 			            'font-size' : '2em',
-			            'background-color': 'GreenYellow'//'data(class)'
+			            'background-color': 'data(class)'
 			      		}
 			    },
 			    {
@@ -60,13 +60,13 @@ $("#result_from").change(function () {
 			            //'label': 'data(label)',
 			            //'width': '0.5px',
 			            //'height': '0.5px',
-			            'width': '0.01em',
-			            'height': '0.01em',
+			            'width': '0.5em',
+			            'height': '0.5em',
 			            'color': 'yellow',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
 			            'border-style': 'solid',
-			            'border-width': '0.0002em',
+			            'border-width': '0.02em',
 			            'border-color': 'white',
 			            //'font-size' : '0.5px',
 			            'font-size' : '0.02em',
@@ -79,7 +79,7 @@ $("#result_from").change(function () {
 
 			            'text-background-color': 'yellow',
 			            'text-background-opacity': 0.4,
-			            'width': '0.1em',
+			            'width': '0.2em',
 			            'control-point-step-size': '0.3em',
 			            'line-color': 'gray'
 			             }
@@ -294,7 +294,7 @@ $("#result_from").change(function () {
                     var year = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["year"];
                     var pmid = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["pmid"];
                     var venue = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["venue"];
-                    var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid:" + pmid + " venue:" + venue +" year:" + year + '<br>' + title; //
+                    var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid: <span id='pmid' data-pmid="+pmid+">"+ pmid + "</span> venue:" + venue +" year:" + year + '<br>' + title; //
                     return content;
 	            }
             } );
@@ -305,6 +305,13 @@ $("#result_from").change(function () {
 			  $('body').toggleClass('config-closed');
 			  cy.resize();
 			});
+
+			$("#tss").on('click', function(){
+              console.log(document.getElementById("pmid").getAttribute("data-pmid"));
+              var pmid = document.getElementById("pmid").getAttribute("data-pmid");
+              window.open('https://www.ncbi.nlm.nih.gov/pubmed/'+pmid);
+
+            });
 
 	},
 	error:function (xhr, ajaxOptions, thrownError){

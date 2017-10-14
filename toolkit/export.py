@@ -70,7 +70,8 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
                                "yearTheme": topicsSumary[2] if topicsSumary else "",
                                "param_3": topicsSumary[3] if topicsSumary else "",
                                "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
-                               "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else ""
+                               "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else "",
+                               "class": "grey" if tree.getRootVal()[0] == "i" else "GreenYellow"
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
                       }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
