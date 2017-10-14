@@ -15,10 +15,10 @@ carpet_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/cytoscape/main_
 #                              "Plane": {"num_class": 7, "dimen": 144}
 #                }
 
-dataset_name = "HandOutlines"
+dataset_name = "synthetic_control"
 source_data_test = dataset_name+"/"+dataset_name+"_TEST"
 source_data_train = dataset_name+"/"+dataset_name+"_TRAIN"
-num_dim = 2709
+num_dim = 60
 #Plane, coffee, DiatomSizeReduction, FacesUCR, ItalyPowerDemand, Symbols, Meat
 
 data_test = csv.reader(open(carpet_dataset+source_data_test), delimiter=',')
@@ -33,9 +33,9 @@ def standardize(dataset):
 label_group = []
 ts_dataset = []
 
-for row in data_test:
-    label_group.append(row[0])
-    ts_dataset.append([float(i) for i in row[1:]])
+#for row in data_test:
+#    label_group.append(row[0])
+#    ts_dataset.append([float(i) for i in row[1:]])
 
 for row in data_train:
     label_group.append(row[0])

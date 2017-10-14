@@ -6,11 +6,33 @@ $("#result_from").change(function () {
 	  var namefile = $("#result_from :selected").attr('value');
 	  console.log(namefile)
 	  $.ajax({dataType:"json", url: "../../clustering_process/result/"+namefile, success: function(result){
-	  console.log(result)
+	  console.log(result) //[0]["data"]["length"]
+	  es = result.edges;
+
+	  var max_edge = max_edge_fun(es);
+
+	  function max_edge_fun(es){
+                    max = 0;
+                     for (len_edge in es){
+                         if (parseFloat(es[len_edge]["data"]["length"]) > max){
+                            //console.log(parseFloat(es[len_edge]["data"]["length"]))
+                            max = parseFloat(es[len_edge]["data"]["length"])
+                            }
+                        }
+                    return max;
+                   }
+
+	  //console.log(max_edge)
 			  var cy = cytoscape({
 			  container: document.getElementById('cy'),
 			  layout: {
-			            name: 'preset'
+			            name: 'cola',
+			            maxSimulationTime: 20000, // max length in ms to run the layout
+			            edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
+			            //edgeLength
+                        //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
+                        //edgeJaccardLength: undefined
+			            //infinite: true
 			            },
 			  elements: result,
 			  // so we can see the ids
@@ -20,16 +42,16 @@ $("#result_from").change(function () {
 			      selector: 'node',
 			      style:{
 			            'label': 'data(yearTheme)',
-			            'width': '2em',
-			            'height': '2em',
+			            'width': '1em',
+			            'height': '1em',
 			            'color': 'black',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
 			            'border-style': 'solid',
-			            'border-width': '0.5em',
-			            'border-color': 'white',
+			            'border-width': '0.1em',
+			            'border-color': 'gray',
 			            'font-size' : '2em',
-			            'background-color': 'blue'//'data(class)'
+			            'background-color': 'GreenYellow'//'data(class)'
 			      		}
 			    },
 			    {
@@ -57,9 +79,9 @@ $("#result_from").change(function () {
 
 			            'text-background-color': 'yellow',
 			            'text-background-opacity': 0.4,
-			            'width': '0.5em',
+			            'width': '0.1em',
 			            'control-point-step-size': '0.3em',
-			            'line-color': 'black'
+			            'line-color': 'gray'
 			             }
 			    }
 			  ],
@@ -127,87 +149,61 @@ $("#result_from").change(function () {
 
 			var options = {
 			  name: 'cose',
-
 			  // Called on `layoutready`
 			  ready: function(){},
-
 			  // Called on `layoutstop`
 			  stop: function(){},
-
 			  // Whether to animate while running the layout
 			  // true : Animate continuously as the layout is running
 			  // false : Just show the end result
 			  // 'end' : Animate with the end result, from the initial positions to the end positions
 			  animate: true,
-
 			  // Easing of the animation for animate:'end'
 			  animationEasing: undefined,
-
 			  // The duration of the animation for animate:'end'
 			  animationDuration: undefined,
-
 			  // A function that determines whether the node should be animated
 			  // All nodes animated by default on animate enabled
 			  // Non-animated nodes are positioned immediately when the layout starts
 			  animateFilter: function ( node, i ){ return true; },
-
-
 			  // The layout animates only after this many milliseconds for animate:true
 			  // (prevents flashing on fast runs)
 			  animationThreshold: 250,
-
 			  // Number of iterations between consecutive screen positions update
 			  // (0 -> only updated on the end)
 			  refresh: 20,
-
 			  // Whether to fit the network view after when done
 			  fit: true,
-
 			  // Padding on fit
 			  padding: 30,
-
 			  // Constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
 			  boundingBox: undefined,
-
 			  // Excludes the label when calculating node bounding boxes for the layout algorithm
 			  nodeDimensionsIncludeLabels: false,
-
 			  // Randomize the initial positions of the nodes (true) or use existing positions (false)
 			  randomize: false,
-
 			  // Extra spacing between components in non-compound graphs
 			  componentSpacing: 40,
-
 			  // Node repulsion (non overlapping) multiplier
 			  nodeRepulsion: function( node ){ return 2048; },
-
 			  // Node repulsion (overlapping) multiplier
 			  nodeOverlap: 4,
-
 			  // Ideal edge (non nested) length
 			  idealEdgeLength: function( edge ){ return 32; },
-
 			  // Divisor to compute edge forces
 			  edgeElasticity: function( edge ){ return 32; },
-
 			  // Nesting factor (multiplier) to compute ideal edge length for nested edges
 			  nestingFactor: 1.2,
-
 			  // Gravity force (constant)
 			  gravity: 1,
-
 			  // Maximum number of iterations to perform
 			  numIter: 1000,
-
 			  // Initial temperature (maximum node displacement)
 			  initialTemp: 1000,
-
 			  // Cooling factor (how the temperature is reduced between consecutive iterations
 			  coolingFactor: 0.99,
-
 			  // Lower temperature threshold (below this point the layout will end)
 			  minTemp: 1.0,
-
 			  // Pass a reference to weaver to use threads for calculations
 			  weaver: false
 			};
@@ -216,7 +212,7 @@ $("#result_from").change(function () {
             cy.center();
 		    //cy.layout(options);
 
-
+            /*
 			cy.nodes().forEach(function(ele) {
 			        ele.qtip({
 			          content: {
@@ -235,6 +231,7 @@ $("#result_from").change(function () {
 			        });
 			      });
 
+            */
 			function  timeSeriesView(objTS){
 			  var cad ="";
 			  for (prop in objTS) {
@@ -243,23 +240,64 @@ $("#result_from").change(function () {
 			  return cad;
 			}
 
+              var graph = null;
+			  var hoverDetail = null;
+
 			cy.on('click', 'node', function(evt){
 			      ts = this.data("topDistribution");
-			      console.log(ts);
-			      ///*
-			      $("#tss").html('');
-			  var graph = new Rickshaw.Graph( {
-			      element: document.querySelector("#tss"),
-			      width: 150,
-			      height: 50,
-			      series: [{
-			          color: 'steelblue',
-			          data: setFormat(ts)
-			      }]
-			  });
+			      //console.log(ts);
+			      // add rows top venue
+			      $("#top_venues").html('');
 
+                  var topVenueSort = setFormatJs(this.data("topVenue"), 'string');
+                  topVenueSort.sort(function (a, b) {return  b.y - a.y;});
+                  console.log(topVenueSort)
+                  for (v in topVenueSort){
+                    $('#top_venues').append('<tr class="item"><td>'+ topVenueSort[v]['x'].replace(/_/g , " ") +'</td><td>'+ topVenueSort[v]['y'] +'</td></tr>');
+                   }
+
+                  $("#top_words").html('');
+                  var topWordsSort = setFormatJs(this.data("topWords"), 'string');
+                  topWordsSort.sort(function (a, b) {return  b.y - a.y;});
+                  for (w in topWordsSort){
+                    $('#top_words').append('<tr><td>'+ topWordsSort[w]['x'] +'</td><td>'+ topWordsSort[w]['y'] +'</td></tr>');
+                   }
+
+              $("#tss").html('');
+			  // INIT LIBRARY OF TIME SERIES
+              if (hoverDetail != null){
+                  hoverDetail._removeListeners();
+              }
+
+			  graph = new Rickshaw.Graph( {
+                    element: document.getElementById("tss"),
+                    renderer: 'line',
+                    series: [
+                        {
+                            color: "#6060c0",
+                            data: setFormatJs(ts, 'number'),
+                            name: 'Prob'
+                        }
+                    ]
+                } );
 			  graph.render();
-			  // */
+
+			  hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                graph: graph,
+                formatter: function(series, x, y) {
+                    //console.log("result")
+                    //console.log(result.idToPmid[x])
+
+                    var title = '<span class="date">' + result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["title"] + '</span>'; //parseFloat(x)
+                    var swatch = '<span class="detail_swatch" style="background-color:"></span>'; // ' + series.color + '
+                    var year = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["year"];
+                    var pmid = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["pmid"];
+                    var venue = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["venue"];
+                    var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid:" + pmid + " venue:" + venue +" year:" + year + '<br>' + title; //
+                    return content;
+	            }
+            } );
+			  // END LIBRARY OF TIME SERIES
 			}); // fin click
 
 			$('#config-toggle').on('click', function(){
@@ -280,10 +318,16 @@ $("#result_from").change(function () {
 
 });
 
-	function setFormat(ts){
-	  arrayTs = [];
-	  for(e in ts){arrayTs.push({x:Number(e),y:ts[e]})}
-	  return arrayTs;
+	function setFormatJs(dataKeyVal, typeData){
+	  arrayJs = [];
+	  if (typeData == "number"){
+	        for(e in dataKeyVal){arrayJs.push({x:Number(e),y:dataKeyVal[e]})}
+	        }
+	  if (typeData == "string"){
+	        for(e in dataKeyVal){arrayJs.push({x:e,y:dataKeyVal[e]})}
+	        }
+
+	  return arrayJs;
 	}
 
     }); // fin document loaded

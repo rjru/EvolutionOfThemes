@@ -132,9 +132,9 @@ def getTopDocsOfThemesOrdened(docsOfThemesOrdened):
         docsOfThemesOrdenedTop.append(themeTop)
     return docsOfThemesOrdenedTop
 
-def getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes):
+def getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened):
     metaDoc = {"pubmed": pubmed, "pmidToId": pmidToId,
-               "idToPmid": idToPmid, "distributionDoc": docsDescript
+               "idToPmid": idToPmid, "distributionDoc": docsDescript, "idDocOrdened": idDocOrdened
                }
     metaTheme = {"topicsSumary": topicsSumary, "distributionThemes": docsOfThemesOrdened,  #themesDescriptTopOrd, #themesDescript,
                  "nameThemes": nameThemes#, "idThemeOrdened": idThemeOrdened, "datesThemes": datesThemes,
@@ -169,6 +169,7 @@ if __name__ == '__main__':
     print('calculate matrix distance')
     dis_matrix = getMatrixDist(docsOfThemesOrdenedTop, fastdtw)  # for themes fastdtw (themesDescriptTopOrd) dist_euclidean (docsOfThemesOrdened) hellinger(docsOfThemesOrdened)
     dis_matrix_time = getMatrixByTime(docsOfThemesOrdened, topicsSumary, datesThemes)
+
     #print("matrix content")
     #print(dis_matrix)
     #print("matrix time")
@@ -176,7 +177,9 @@ if __name__ == '__main__':
 
     dis_matrix = (numpy.matrix(dis_matrix) + 2*numpy.matrix(dis_matrix_time))/2
     print(dis_matrix)
+    dis_matrix = numpy.multiply(dis_matrix, dis_matrix)
     a = numpy.asarray(dis_matrix)
+
     numpy.savetxt("dis_matrix.csv", a, delimiter=",")
     #print('generate image of document')
     #generateImageDistribution(docsThemesOrdened, datesThemes, list(idToPmid.values()))  # muestraPmid generate image about themes' distribution of each document
@@ -190,12 +193,12 @@ if __name__ == '__main__':
     nameThemes = getNameThemes(themesDescript)
     # método para aplicar nj y ademas calcula la raiz, mejor dicho lo convierte en un árbol con raiz
     t = njWithRoot(dis_matrix, nameThemes)  # for themes
-    metaDoc, metaTheme = getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes)
+    metaDoc, metaTheme = getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened)
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
     radialLayout(rootedTree)
     jsonTree = treeToJsonPubmed(rootedTree, metaDoc, metaTheme)
-    jsonfile = open("/result/test111.json", 'w')
+    jsonfile = open("result/cont_dtw_time1000_square2.json", 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)
     #print("hello word")

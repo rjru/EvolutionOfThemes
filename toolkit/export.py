@@ -79,7 +79,10 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
 def edgesToJson(tree, edges):
     #if tree != None:
     if tree.getLeftChild() != None:
-        edges.append({"data": {"id": "edge"+str(len(edges)), "source": tree.getLeftChild().getParent().getRootVal(), "target": tree.getLeftChild().getRootVal(), "length": 10*tree.getLeftChild().getweightAristToParentVal()}})
+        edges.append({"data": {"id": "edge"+str(len(edges)),
+                               "source": tree.getLeftChild().getParent().getRootVal(),
+                               "target": tree.getLeftChild().getRootVal(),
+                               "length": 10*tree.getLeftChild().getweightAristToParentVal()}})
         edgesToJson(tree.getLeftChild(), edges)
     if tree.getRightChild() != None:
         edges.append({"data": {"id": "edge"+str(len(edges)),
@@ -94,9 +97,12 @@ def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
     #print('nodes json')
     nodes = []
     nodesJs = nodesToJsonPubmed(rootedTree, nodes, metaTheme)
-    #print('edges json')
     edges = []
     edgesJs = edgesToJson(rootedTree, edges)
+
+#    metaDoc = {"pubmed": pubmed, "pmidToId": pmidToId,
+              # "idToPmid": idToPmid, "distributionDoc": docsDescript
+              # }
 
     for idDoc in metaDoc["pubmed"].docs:
         metaDoc["pubmed"].docs[idDoc].pop("abstract")  # remove abstract of document because it is overload json file
@@ -110,7 +116,10 @@ def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
     for idDoc in metaDoc["pubmed"].docs:
         metaDoc["pubmed"].docs[str(idDoc)] = metaDoc["pubmed"].docs.pop(idDoc)
 
-    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs}
+    idToPmidDict = {str(key): metaDoc["idToPmid"][key] for key in metaDoc["idToPmid"]}
+    idDocOrdened = {str(key): metaDoc["idDocOrdened"][key] for key in metaDoc["idDocOrdened"]}
+
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened}
 
     return str(jsonTree).replace("'", '"')
 
