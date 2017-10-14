@@ -12,13 +12,13 @@ body {
 }
 
 #cy {
-  height:85%;
-
-  overflow:hidden;
+  position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  background-color: white;
+  right: 17em;
+  height:85%;
+  overflow:hidden;
 }
 
 .config {
@@ -95,19 +95,13 @@ a:hover {
   }
 }
 
-
-#all
-{
-  height: 100vh;
-  position: relative;
-  right: 17em;
-}
-
 #tss
 {
+  position: absolute;
+  left: 0;
+  right: 17em;
   height:15%;
   bottom: 25px;
-
 }
 
 th, td

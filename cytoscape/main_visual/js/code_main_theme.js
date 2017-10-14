@@ -245,13 +245,13 @@ $("#result_from").change(function () {
 
 			cy.on('click', 'node', function(evt){
 			      ts = this.data("topDistribution");
-			      //console.log(ts);
+			      console.log(ts);
 			      // add rows top venue
 			      $("#top_venues").html('');
 
                   var topVenueSort = setFormatJs(this.data("topVenue"), 'string');
                   topVenueSort.sort(function (a, b) {return  b.y - a.y;});
-                  console.log(topVenueSort)
+                  //console.log(topVenueSort)
                   for (v in topVenueSort){
                     $('#top_venues').append('<tr class="item"><td>'+ topVenueSort[v]['x'].replace(/_/g , " ") +'</td><td>'+ topVenueSort[v]['y'] +'</td></tr>');
                    }
@@ -271,6 +271,7 @@ $("#result_from").change(function () {
 
 			  graph = new Rickshaw.Graph( {
                     element: document.getElementById("tss"),
+                    //width: '1150',
                     renderer: 'line',
                     series: [
                         {
