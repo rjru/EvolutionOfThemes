@@ -15,10 +15,13 @@ RESULT_DIR = 'C:/Users/rbrto-pc/Google Drive/citation_lda/result/';
 #result\pubmed_citation_lda
 RUN_DIR = '/home/xwang95/run/';
 
-TEST_NUMBER = "test_1"
-TEST_DATA = 'C:/Users/rbrto-pc/Google Drive/citation_lda/tests/'+TEST_NUMBER+'/data/'
-TEST_RESOURCE = 'C:/Users/rbrto-pc/Google Drive/citation_lda/tests/'+TEST_NUMBER+'/'
-TEST_RESULT = 'C:/Users/rbrto-pc/Google Drive/citation_lda/tests/'+TEST_NUMBER+'/result/'
+TEST_NUMBER = "test_4"
+#TEST_ROOT = 'C:/Users/rbrto-pc/Google Drive/citation_lda/tests/'
+TEST_ROOT = 'C:/Users/rbrto-pc/Documents/'
+TEST_DATA = TEST_ROOT+TEST_NUMBER+'/data/'
+TEST_RESOURCE = TEST_ROOT+TEST_NUMBER+'/'
+TEST_RESULT = TEST_ROOT+TEST_NUMBER+'/result/'
 
 if __name__ == '__main__':
+
     pass

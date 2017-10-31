@@ -55,6 +55,16 @@ $("#result_from").change(function () {
 			      		}
 			    },
 			    {
+			      selector: 'node:selected',
+                  style: {
+                    "border-width": '5em',
+                    "border-color": '#FE2E2E',
+                    "border-opacity": '0.5',
+                    "background-color": '#2efe2e',
+                    "text-outline-color": '#77828C'
+                  }
+                 },
+			    {
 			      selector: 'node[class="grey"]',
 			      style:{
 			            //'label': 'data(label)',
@@ -243,7 +253,120 @@ $("#result_from").change(function () {
               var graph = null;
 			  var hoverDetail = null;
 
+            var data = []
+            var graph = new Rickshaw.Graph( {
+                element: document.getElementById("tss"),
+                //width: '1150',
+                renderer: 'line',
+                series: data,//[
+                    //{
+                    //    color: "#6060c0",
+                    //    data: setFormatJs(ts, 'number'),
+                    //    name: 'Prob'
+                    //}
+                //]
+            } );
+
+            //for(e in a){d[Number(e)] = a[e]}
+            var format = function(n) {
+
+            /*
+                var map = {
+                    0: 'zero',
+                    1: 'first',
+                    2: 'second',
+                    3: 'third',
+                    4: 'fourth'
+                };
+            */
+                var docDates = result.docDates;
+                var map = {}
+                for(e in docDates){map[Number(e)] = docDates[e]}
+
+                return map[n];
+            }
+
+            var x_ticks = new Rickshaw.Graph.Axis.X( {
+                graph: graph,
+                orientation: 'bottom',
+                element: document.getElementById('x_axis'),
+                pixelsPerTick: 70,
+                tickFormat: format
+            } );
+
+            graph.render();
+
+
+            hoverDetail = new Rickshaw.Graph.HoverDetail( {
+            graph: graph,
+            formatter: function(series, x, y) {
+                //console.log("result")
+                //console.log(result.idToPmid[x])
+                var title = '<span class="date">' + result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["title"] + '</span>'; //parseFloat(x)
+                var swatch = '<span class="detail_swatch" style="background-color:"></span>'; // ' + series.color + '
+                var year = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["year"];
+                var pmid = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["pmid"];
+                var venue = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["venue"];
+                var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid: <span id='pmid' data-pmid="+pmid+">"+ pmid + "</span> venue:" + venue +" year:" + year + '<br>' + title; //
+                return content;
+            }
+          });
+
+
+            cy.on('tap', function(event){
+              // target holds a reference to the originator
+              // of the event (core or element)
+              var evtTarget = event.target;
+
+              if( evtTarget === cy ){
+                  console.log('tap on background');
+                  while(data.length > 0) {
+                      var e = data.pop();
+                      //$(String(e.name)).css("border-color", '#FE2E2E');
+                      //data.pop();
+                  }
+                  graph.update();
+
+              } else {
+                console.log('tap on some element');
+              }
+            });
+
+            function getRandomColor() {
+              var letters = '0123456789ABCDEF';
+              var color = '#';
+              for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+              }
+              return color;
+            }
+
 			cy.on('click', 'node', function(evt){
+
+              ran_color = getRandomColor();
+
+              if(evt.originalEvent.ctrlKey) {
+                console.log(this.id())
+                if (this.selected()){
+                    console.log("unselect")
+                    for (var i = 0; i < data.length; i ++) {
+                        if (data[i].name == this.id()) {
+                            data.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                else{
+                    console.log("select")
+
+                    this.css("border-color", ran_color);
+                    ts = this.data("topDistribution");
+                    data.push({name: this.id(), data: setFormatJs(ts, 'number'), color: ran_color});
+                    console.log(data)
+                }
+                graph.update();
+              }
+              else{
 			      ts = this.data("topDistribution");
 			      console.log(ts);
 			      // add rows top venue
@@ -263,42 +386,21 @@ $("#result_from").change(function () {
                     $('#top_words').append('<tr><td>'+ topWordsSort[w]['x'] +'</td><td>'+ topWordsSort[w]['y'] +'</td></tr>');
                    }
 
-              $("#tss").html('');
-			  // INIT LIBRARY OF TIME SERIES
-              if (hoverDetail != null){
-                  hoverDetail._removeListeners();
-              }
+                  //$("#tss").html('');
+                  // INIT LIBRARY OF TIME SERIES
+                  //if (hoverDetail != null){
+                  //    hoverDetail._removeListeners();
+                  //}
 
-			  graph = new Rickshaw.Graph( {
-                    element: document.getElementById("tss"),
-                    //width: '1150',
-                    renderer: 'line',
-                    series: [
-                        {
-                            color: "#6060c0",
-                            data: setFormatJs(ts, 'number'),
-                            name: 'Prob'
-                        }
-                    ]
-                } );
-			  graph.render();
+                  while(data.length > 0) {
+                      data.pop();
+                  }
+                  this.css("border-color", '#FE2E2E');
+                  data.push({name: this.id(), data: setFormatJs(ts, 'number'), color: '#FE2E2E'});
+                  graph.update();
 
-			  hoverDetail = new Rickshaw.Graph.HoverDetail( {
-                graph: graph,
-                formatter: function(series, x, y) {
-                    //console.log("result")
-                    //console.log(result.idToPmid[x])
-
-                    var title = '<span class="date">' + result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["title"] + '</span>'; //parseFloat(x)
-                    var swatch = '<span class="detail_swatch" style="background-color:"></span>'; // ' + series.color + '
-                    var year = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["year"];
-                    var pmid = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["pmid"];
-                    var venue = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["venue"];
-                    var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid: <span id='pmid' data-pmid="+pmid+">"+ pmid + "</span> venue:" + venue +" year:" + year + '<br>' + title; //
-                    return content;
-	            }
-            } );
 			  // END LIBRARY OF TIME SERIES
+              }
 			}); // fin click
 
 			$('#config-toggle').on('click', function(){

@@ -132,9 +132,9 @@ def getTopDocsOfThemesOrdened(docsOfThemesOrdened):
         docsOfThemesOrdenedTop.append(themeTop)
     return docsOfThemesOrdenedTop
 
-def getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened):
+def getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened, datesDoc):
     metaDoc = {"pubmed": pubmed, "pmidToId": pmidToId,
-               "idToPmid": idToPmid, "distributionDoc": docsDescript, "idDocOrdened": idDocOrdened
+               "idToPmid": idToPmid, "distributionDoc": docsDescript, "idDocOrdened": idDocOrdened, "datesDoc": datesDoc
                }
     metaTheme = {"topicsSumary": topicsSumary, "distributionThemes": docsOfThemesOrdened,  #themesDescriptTopOrd, #themesDescript,
                  "nameThemes": nameThemes#, "idThemeOrdened": idThemeOrdened, "datesThemes": datesThemes,
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     nameThemes = getNameThemes(themesDescript)
     # método para aplicar nj y ademas calcula la raiz, mejor dicho lo convierte en un árbol con raiz
     t = njWithRoot(dis_matrix, nameThemes)  # for themes
-    metaDoc, metaTheme = getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened)
+    metaDoc, metaTheme = getMeta(pubmed, pmidToId, idToPmid, docsDescript, topicsSumary, docsOfThemesOrdened, nameThemes, idDocOrdened, datesDoc)
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
     radialLayout(rootedTree)

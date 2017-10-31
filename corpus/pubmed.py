@@ -709,11 +709,11 @@ if (__name__ == '__main__'):
     pubmedCitContextFilePathTest = os.path.join(variables.TEST_RESOURCE, 'citContextFile.txt')
     pubmedFolderPathLst = [pubmedFolderPathTest]
     pubmedCitContextFilePathLst = [pubmedCitContextFilePathTest]
-
     metaDataFilePath = os.path.join(variables.TEST_RESOURCE, 'pubmed_metadata.txt')
     citFilePath = os.path.join(variables.TEST_RESOURCE, 'pubmed_citation.txt')
     absFilePath = os.path.join(variables.TEST_RESOURCE, 'pubmed_abstract.txt')
     bodyFilePath = os.path.join(variables.TEST_RESOURCE, 'pubmed_body.txt')
+
     # ===========================================================================
     # Genearte the MetaDataFile
     # ===========================================================================
@@ -722,15 +722,15 @@ if (__name__ == '__main__'):
     # ===========================================================================
     # Generate Citation File
     # ===========================================================================
-    #print("1. generate citation CONTEXT file")
-    #generateCitContextFile(metaDataFilePath, pubmedCitContextFilePathTest)
-    #print("2. generate citation file")
-    #generateCitFile(readMetaFile(metaDataFilePath), pubmedCitContextFilePathLst, citFilePath)
+    print("1. generate citation CONTEXT file")
+    generateCitContextFile(metaDataFilePath, pubmedCitContextFilePathTest)
+    print("2. generate citation file")
+    generateCitFile(readMetaFile(metaDataFilePath), pubmedCitContextFilePathLst, citFilePath)
 
-    #print("3. generate abstract dataset")
-    #generateAbstractDataset(pubmedFolderPathLst)
-    #print("4. generate abstract file")
-    #generateAbstractFile(metaDataFilePath, citFilePath, absFilePath)
+    print("3. generate abstract dataset")
+    generateAbstractDataset(pubmedFolderPathLst)
+    print("4. generate abstract file")
+    generateAbstractFile(metaDataFilePath, citFilePath, absFilePath)
 
     # ===========================================================================
     # Generate body File

@@ -67,7 +67,7 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
                                "topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
                                "param_1": topicsSumary[1] if topicsSumary else "",
-                               "yearTheme": topicsSumary[2] if topicsSumary else "",
+                               "yearTheme": round(topicsSumary[2],2) if topicsSumary else "",
                                "param_3": topicsSumary[3] if topicsSumary else "",
                                "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
                                "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else "",
@@ -120,7 +120,7 @@ def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
     idToPmidDict = {str(key): metaDoc["idToPmid"][key] for key in metaDoc["idToPmid"]}
     idDocOrdened = {str(key): metaDoc["idDocOrdened"][key] for key in metaDoc["idDocOrdened"]}
 
-    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened}
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened, "docDates": metaDoc["datesDoc"]}
 
     return str(jsonTree).replace("'", '"')
 

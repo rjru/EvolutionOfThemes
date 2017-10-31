@@ -167,7 +167,8 @@ NOT_FOLD = True;
 # MAIN
 #===============================================================================
 def pubmedCitationLdaRun(K, BurninHr, SampliHr): # metodo principal para extraer lda citation de pubmed
-    dumpFileFolder = os.path.join(variables.RESULT_DIR, 'pubmed_citation_lda/');
+    #dumpFileFolder = os.path.join(variables.RESULT_DIR, 'pubmed_citation_lda/');
+    dumpFileFolder = variables.TEST_RESULT;
     '''data loading'''
     print('[pubmed-citation-LDA]: loading pubmed');
     pmd = getPubMedCorpus(); # retorna cargada la bd de pubmed metadata, citas y abstract

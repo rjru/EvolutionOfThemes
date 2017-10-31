@@ -66,13 +66,17 @@ def getVenueEntropy(topicSummaryDict):
         remProb = 1.0;
         minProb = 1.0;
         (topicId, topicProb, topicYearMean, topicYearVar, topDocs, topToks, topVens) = topicSummaryDict[topicId];
-        for (prob, ven) in topVens: 
+
+        for (prob, ven) in topVens:
             venEnt += -topicProb * prob * math.log(prob);
             remProb -= prob;
             minProb = min(minProb, prob);
+
         venEnt += -topicProb * remProb * math.log(minProb);
+
     topicEnt = 0.0;
     for topicId in range(len(topicSummaryDict)): topicEnt += -topicProb * math.log(topicProb);
+
     return (venEnt, topicEnt, topicEnt + venEnt);
              
 NOT_FOLD = True;    
@@ -130,29 +134,29 @@ def dumpVenRankingFile(topicSummaryFilePath):
 
 def printVenEntropy(topicSummaryFilePath):
     topicSummaryDict = theme_discovery.citation_based_method.readTopicSummary(topicSummaryFilePath);
-    print (getVenueEntropy(topicSummaryDict));
+    print(getVenueEntropy(topicSummaryDict));
 
 
 
 if(__name__ == "__main__"):
-    citMatrixFilePath = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_30_45.lda_citMatrix_timeSorted');
+    #citMatrixFilePath = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_30_45.lda_citMatrix_timeSorted');
     #topicSummaryFilePath1 = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda', 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_10_10.lda_summary');
     #topicSummaryFilePath2 = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda', 'pubmed_citation_lda_100_145317_145317_0.001_0.001_timeCtrl_30_45.lda_summary');
     topicSummaryFilePath2 = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_30_45.lda_summary');
 
     #citMatrixFilePath = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda', 'pubmed_citation_lda_100_145317_145317_0.001_0.001_timeCtrl_30_45.lda_citMatrix');
-    topicSummaryFilePath = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_30_45.lda_summary');
-    citMatrix = theme_discovery.citation_based_method.readCitMatrixSummary(citMatrixFilePath);
-    topicSummaryDict = theme_discovery.citation_based_method.readTopicSummary(topicSummaryFilePath);
+    #topicSummaryFilePath = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_citation_lda_500_145317_145317_0.001_0.001_timeCtrl_30_45.lda_summary');
+    #citMatrix = theme_discovery.citation_based_method.readCitMatrixSummary(citMatrixFilePath);
+    #topicSummaryDict = theme_discovery.citation_based_method.readTopicSummary(topicSummaryFilePath);
 #    pmd = corpus.pubmed.getPubMedCorpus();
     
 #    getTopicCitationProb(citMatrix, topicSummaryDict, pmd);
     
-    edgeWeightThreshold = 0.02;
-    dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold);
+    #edgeWeightThreshold = 0.02;
+    #dumpGraphFile(citMatrixFilePath, topicSummaryFilePath, edgeWeightThreshold);
 #    dumpVenRankingFile(topicSummaryFilePath);
     #printVenEntropy(topicSummaryFilePath1);
-    printVenEntropy(topicSummaryFilePath2);
+    printVenEntropy("C:/Users/rbrto-pc/Google Drive/citation_lda/tests/test_1/result/pubmed_citation_lda_40_5001_5001_0.001_0.001_timeCtrl_3_4.5.lda_summary");
     #topicSummaryFilePath3 = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_content_title_lda', 'pubmed_content_title_lda_500_317975_22312_0.001_0.001_timeCtrl_12_12.lda_summary');
     #topicSummaryFilePath4 = os.path.join(toolkit.variables.RESULT_DIR, 'pubmed_content_title_lda', 'pubmed_content_title_lda_100_317975_22312_0.001_0.001_timeCtrl_12_12.lda_summary');        
     #printVenEntropy(topicSummaryFilePath3);
