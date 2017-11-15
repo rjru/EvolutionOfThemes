@@ -51,12 +51,12 @@ def getTopDistribution(distribution, threshold):
     return topDitribution
 
 # to format json
-def nodesToJsonPubmed(tree, nodes, metaTheme):
+def nodesToJsonPubmed(tree, nodes, metaTheme, venue_to_color):
 
     constOf = 1500  # constante para multiplicar las distancias porque son muy pequeñas
     if tree != None:
-        nodesToJsonPubmed(tree.getLeftChild(), nodes, metaTheme)
-        nodesToJsonPubmed(tree.getRightChild(), nodes, metaTheme)
+        nodesToJsonPubmed(tree.getLeftChild(), nodes, metaTheme, venue_to_color)
+        nodesToJsonPubmed(tree.getRightChild(), nodes, metaTheme, venue_to_color)
         #print(tree.getRootVal())
         # 'Yes' if fruit == 'Apple' else 'No'
         distributionTheme = None if tree.getRootVal()[0] == "i" else metaTheme["distributionThemes"][metaTheme["nameThemes"].index(tree.getRootVal())]
@@ -71,7 +71,7 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
                                "param_3": topicsSumary[3] if topicsSumary else "",
                                "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
                                "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else "",
-                               "class": "grey" if tree.getRootVal()[0] == "i" else "GreenYellow"
+                               "class": "grey" if tree.getRootVal()[0] == "i" else venue_to_color[topicsSumary[6][0][1]]  # "GreenYellow" #
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
                       }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
@@ -79,25 +79,26 @@ def nodesToJsonPubmed(tree, nodes, metaTheme):
 
 def edgesToJson(tree, edges):
     #if tree != None:
+    cons = 1
     if tree.getLeftChild() != None:
         edges.append({"data": {"id": "edge"+str(len(edges)),
                                "source": tree.getLeftChild().getParent().getRootVal(),
                                "target": tree.getLeftChild().getRootVal(),
-                               "length": 10*tree.getLeftChild().getweightAristToParentVal()}})
+                               "length": cons*tree.getLeftChild().getweightAristToParentVal()}})
         edgesToJson(tree.getLeftChild(), edges)
     if tree.getRightChild() != None:
         edges.append({"data": {"id": "edge"+str(len(edges)),
                                "source": tree.getRightChild().getParent().getRootVal(),
                                "target": tree.getRightChild().getRootVal(),
-                               "length": 10*tree.getRightChild().getweightAristToParentVal()
+                               "length": cons*tree.getRightChild().getweightAristToParentVal()
                                }})
         edgesToJson(tree.getRightChild(), edges)
     return edges
 
-def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
+def treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color):
     #print('nodes json')
     nodes = []
-    nodesJs = nodesToJsonPubmed(rootedTree, nodes, metaTheme)
+    nodesJs = nodesToJsonPubmed(rootedTree, nodes, metaTheme, venue_to_color)
     edges = []
     edgesJs = edgesToJson(rootedTree, edges)
 
@@ -114,13 +115,17 @@ def treeToJsonPubmed(rootedTree, metaDoc, metaTheme):
         if "citLst" in metaDoc["pubmed"].docs[idDoc]:
             metaDoc["pubmed"].docs[idDoc].pop("citLst")
 
-    for idDoc in metaDoc["pubmed"].docs:
-        metaDoc["pubmed"].docs[str(idDoc)] = metaDoc["pubmed"].docs.pop(idDoc)
+    #cont = 0
+    #long = len(metaDoc["pubmed"].docs)
+    #for idDoc in metaDoc["pubmed"].docs:
+    #    metaDoc["pubmed"].docs[str(idDoc)] = metaDoc["pubmed"].docs.pop(idDoc)
+    #    cont = cont + 1
 
+    metaDocDic = {str(key): metaDoc["pubmed"].docs[key] for key in metaDoc["pubmed"].docs}
     idToPmidDict = {str(key): metaDoc["idToPmid"][key] for key in metaDoc["idToPmid"]}
     idDocOrdened = {str(key): metaDoc["idDocOrdened"][key] for key in metaDoc["idDocOrdened"]}
 
-    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDoc["pubmed"].docs, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened, "docDates": metaDoc["datesDoc"]}
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDocDic, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened, "docDates": metaDoc["datesDoc"]}
 
     return str(jsonTree).replace("'", '"')
 

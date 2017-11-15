@@ -1,11 +1,19 @@
-   $( document ).ready(function() {
-        console.log( "document loaded" );
+$( document ).ready(function() {
+    console.log( "document loaded" );
 
+var graph = null;
+var hoverDetail = null;
 
 $("#result_from").change(function () {
+
+      $("#tss").html('');
+      if (hoverDetail != null){
+          hoverDetail._removeListeners();
+      }
+
 	  var namefile = $("#result_from :selected").attr('value');
 	  console.log(namefile)
-	  $.ajax({dataType:"json", url: "../../clustering_process/result/"+namefile, success: function(result){
+	  $.ajax({dataType:"json", url: "../../clustering_process/final_result/"+namefile, success: function(result){
 	  console.log(result) //[0]["data"]["length"]
 	  es = result.edges;
 
@@ -23,17 +31,21 @@ $("#result_from").change(function () {
                    }
 
 	  //console.log(max_edge)
+
 			  var cy = cytoscape({
 			  container: document.getElementById('cy'),
+               /*
 			  layout: {
 			            name: 'cola',
-			            maxSimulationTime: 20000, // max length in ms to run the layout
+			            //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
 			            edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
+			            ready: function(){}, // on layoutready
 			            //edgeLength
                         //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
                         //edgeJaccardLength: undefined
-			            //infinite: true
-			            },
+                        //fit: true,
+			            infinite: true
+			            }, */
 			  elements: result,
 			  // so we can see the ids
 			  style:
@@ -60,7 +72,7 @@ $("#result_from").change(function () {
                     "border-width": '5em',
                     "border-color": '#FE2E2E',
                     "border-opacity": '0.5',
-                    "background-color": '#2efe2e',
+                    //"background-color": '#2efe2e',
                     "text-outline-color": '#77828C'
                   }
                  },
@@ -95,9 +107,13 @@ $("#result_from").change(function () {
 			             }
 			    }
 			  ],
-                /*
+
+
 			  layout: {
 			          name: 'preset',
+                      //fit:false,
+			          /*
+
 			          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
 			          zoom: undefined, // the zoom level to set (prob want fit = false if set)
 			          pan: undefined, // the pan level to set (prob want fit = false if set)
@@ -110,8 +126,9 @@ $("#result_from").change(function () {
 			          ready: undefined, // callback on layoutready
 			          stop: undefined, // callback on layoutstop
 			          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts
+			      	  */
 			      	  }
-			      	  // */
+			      	  //
 
 			      //layout:{defaults}
 			}); // fin citoscape
@@ -120,108 +137,38 @@ $("#result_from").change(function () {
 			//console.log(data.edges[0]["data"]["length"])
 
 			var defaults = {
-			  name: 'cola',
-              animate: true, // whether to show the layout as it's running
-              refresh: 1, // number of ticks per frame; higher is faster but more jerky
-              maxSimulationTime: 4000, // max length in ms to run the layout
-              ungrabifyWhileSimulating: false, // so you can't drag nodes during layout
-              fit: true, // on every layout reposition of nodes, fit the viewport
-              padding: 30, // padding around the simulation
-              boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-              nodeDimensionsIncludeLabels: undefined, // whether labels should be included in determining the space used by a node (default true)
+                name: 'cola',
+                //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
+                edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
+                nodeSpacing: function( node ){ return 1; },
+                //edgeLength
+                //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
+                //edgeJaccardLength: undefined
+                //fit: false,
+                infinite: true
+            };
 
-              // layout event callbacks
-              ready: function(){}, // on layoutready
-              stop: function(){}, // on layoutstop
+            //cy.fit(); # holaaa
+            var ly = cy.layout(defaults) //{name: 'cola'}
+            //cy.center();
 
-              // positioning options
-              randomize: false, // use random node positions at beginning of layout
-              avoidOverlap: true, // if true, prevents overlap of node bounding boxes
-              handleDisconnected: true, // if true, avoids disconnected components from overlapping
-              nodeSpacing: function( node ){ return 10; }, // extra spacing around nodes
-              flow: undefined, // use DAG/tree flow layout if specified, e.g. { axis: 'y', minSeparation: 30 }
-              alignment: undefined, // relative alignment constraints on nodes, e.g. function( node ){ return { x: 0, y: 1 } }
+            var flag = true;
+            //cy.layout({name: 'cola'})
+            $('#playPause').on('click', function() {
+                if(flag) {
+                    $(this).html('Pause');
 
-              // different methods of specifying edge length
-              // each can be a constant numerical value or a function like `function( edge ){ return 2; }`
-              edgeLength: undefined, // sets edge length directly in simulation
-              edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
-              edgeJaccardLength: undefined, // jaccard edge length in simulation
-
-              // iterations of cola algorithm; uses default values on undefined
-              unconstrIter: undefined, // unconstrained initial layout iterations
-              userConstIter: undefined, // initial layout iterations with user-specified constraints
-              allConstIter: undefined, // initial layout iterations with all constraints including non-overlap
-
-              // infinite layout options
-              infinite: false // overrides all other options for a forces-all-the-time mode
-  };
-
-			var options = {
-			  name: 'cose',
-			  // Called on `layoutready`
-			  ready: function(){},
-			  // Called on `layoutstop`
-			  stop: function(){},
-			  // Whether to animate while running the layout
-			  // true : Animate continuously as the layout is running
-			  // false : Just show the end result
-			  // 'end' : Animate with the end result, from the initial positions to the end positions
-			  animate: true,
-			  // Easing of the animation for animate:'end'
-			  animationEasing: undefined,
-			  // The duration of the animation for animate:'end'
-			  animationDuration: undefined,
-			  // A function that determines whether the node should be animated
-			  // All nodes animated by default on animate enabled
-			  // Non-animated nodes are positioned immediately when the layout starts
-			  animateFilter: function ( node, i ){ return true; },
-			  // The layout animates only after this many milliseconds for animate:true
-			  // (prevents flashing on fast runs)
-			  animationThreshold: 250,
-			  // Number of iterations between consecutive screen positions update
-			  // (0 -> only updated on the end)
-			  refresh: 20,
-			  // Whether to fit the network view after when done
-			  fit: true,
-			  // Padding on fit
-			  padding: 30,
-			  // Constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-			  boundingBox: undefined,
-			  // Excludes the label when calculating node bounding boxes for the layout algorithm
-			  nodeDimensionsIncludeLabels: false,
-			  // Randomize the initial positions of the nodes (true) or use existing positions (false)
-			  randomize: false,
-			  // Extra spacing between components in non-compound graphs
-			  componentSpacing: 40,
-			  // Node repulsion (non overlapping) multiplier
-			  nodeRepulsion: function( node ){ return 2048; },
-			  // Node repulsion (overlapping) multiplier
-			  nodeOverlap: 4,
-			  // Ideal edge (non nested) length
-			  idealEdgeLength: function( edge ){ return 32; },
-			  // Divisor to compute edge forces
-			  edgeElasticity: function( edge ){ return 32; },
-			  // Nesting factor (multiplier) to compute ideal edge length for nested edges
-			  nestingFactor: 1.2,
-			  // Gravity force (constant)
-			  gravity: 1,
-			  // Maximum number of iterations to perform
-			  numIter: 1000,
-			  // Initial temperature (maximum node displacement)
-			  initialTemp: 1000,
-			  // Cooling factor (how the temperature is reduced between consecutive iterations
-			  coolingFactor: 0.99,
-			  // Lower temperature threshold (below this point the layout will end)
-			  minTemp: 1.0,
-			  // Pass a reference to weaver to use threads for calculations
-			  weaver: false
-			};
-
-			//cy.add(data)
-            cy.center();
+                      //console.log(cy.$('node')[0]._private.style.label.hide())   'label': 'data(yearTheme)'
+                      var stringStylesheet = 'node { label: "data(label)" }';
+                      console.log(cy.style().selector('node').style('label', '').update() );
+                    ly.run();
+                } else {
+                    $(this).html('Play');
+                    ly.stop();
+                }
+                flag = !flag;
+            });
 		    //cy.layout(options);
-
             /*
 			cy.nodes().forEach(function(ele) {
 			        ele.qtip({
@@ -250,10 +197,11 @@ $("#result_from").change(function () {
 			  return cad;
 			}
 
-              var graph = null;
-			  var hoverDetail = null;
+
 
             var data = []
+
+            // inicio  Rickshaw.Graph
             var graph = new Rickshaw.Graph( {
                 element: document.getElementById("tss"),
                 //width: '1150',
@@ -300,7 +248,7 @@ $("#result_from").change(function () {
             hoverDetail = new Rickshaw.Graph.HoverDetail( {
             graph: graph,
             formatter: function(series, x, y) {
-                //console.log("result")
+                console.log("result")
                 //console.log(result.idToPmid[x])
                 var title = '<span class="date">' + result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["title"] + '</span>'; //parseFloat(x)
                 var swatch = '<span class="detail_swatch" style="background-color:"></span>'; // ' + series.color + '
@@ -386,7 +334,16 @@ $("#result_from").change(function () {
                     $('#top_words').append('<tr><td>'+ topWordsSort[w]['x'] +'</td><td>'+ topWordsSort[w]['y'] +'</td></tr>');
                    }
 
-                  //$("#tss").html('');
+                  $("#titles_list").html('');
+                  //var topWordsSort = setFormatJs(this.data("metaDoc"), 'string');
+                  //topWordsSort.sort(function (a, b) {return  b.y - a.y;});  <li class="list-group-item">One</li>
+                  for (md in this.data("topDistribution")){
+                    if(this.data("topDistribution")[md] >= 0.05){
+                        $('#titles_list').append('<li class="list-group-item">'+result.metaDoc[result.idToPmid[md]]["title"]+'</li>');
+                    }
+                   }
+
+
                   // INIT LIBRARY OF TIME SERIES
                   //if (hoverDetail != null){
                   //    hoverDetail._removeListeners();
@@ -424,7 +381,7 @@ $("#result_from").change(function () {
 			  elements: undefined});
 	    }
 	}
-	}); // fin ajax
+	}); // fin ajax json
 
 });
 
@@ -439,5 +396,4 @@ $("#result_from").change(function () {
 
 	  return arrayJs;
 	}
-
-    }); // fin document loaded
+});

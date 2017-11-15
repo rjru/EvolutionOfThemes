@@ -147,13 +147,24 @@ def getNameThemes(themesDescript):
         nameThemes.append("theme_"+str(theme))
     return nameThemes
 
-if __name__ == '__main__':
+def normalize_matrix(m_c, m_t):
+    max_val_m_cont = m_c.max()
+    max_val_m_t = m_t.max()
+    #max_val = max(max_val_m_cont, max_val_m_t)
+
+    for f in range(0, len(m_c)):
+        for c in range(0, len(m_c)):
+            m_c[f, c] = m_c[f, c] / max_val_m_cont
+            m_t[f, c] = m_t[f, c] / max_val_m_t
+    return m_c, m_t
+
+def generateJsonbyClustering(file_lda):
     pubmed = getPubMedCorpus()  # load raw data
     #print(pubmed.docs[21172003])
     (pmidToId, idToPmid) = getCitMetaGraphPmidIdMapping(pubmed)
-    ldaFilePath = os.path.join(variables.TEST_RESULT, 'pubmed_citation_lda_40_5001_5001_0.001_0.001_timeCtrl_3_4.5.lda')
+    ldaFilePath = os.path.join(variables.TEST_RESULT, file_lda+'.lda')
     ldaInstance = topic_modeling.lda.readLdaEstimateFile(ldaFilePath)  # load lda result
-    ldaTopicSumaryFilePath = os.path.join(variables.TEST_RESULT, 'pubmed_citation_lda_40_5001_5001_0.001_0.001_timeCtrl_3_4.5.lda_summary')
+    ldaTopicSumaryFilePath = os.path.join(variables.TEST_RESULT, file_lda+'.lda_summary')
     topicsSumary = readTopicSummary(ldaTopicSumaryFilePath)  # load lda sumary for order descriptor by time
 
     # we get characteristic description of each document, this was calculated by lda before
@@ -167,20 +178,16 @@ if __name__ == '__main__':
     docsOfThemesOrdenedTop = getTopDocsOfThemesOrdened(docsOfThemesOrdened)
 
     print('calculate matrix distance')
-    dis_matrix = getMatrixDist(docsOfThemesOrdenedTop, fastdtw)  # for themes fastdtw (themesDescriptTopOrd) dist_euclidean (docsOfThemesOrdened) hellinger(docsOfThemesOrdened)
+    dis_matrix_cont = getMatrixDist(docsOfThemesOrdenedTop, fastdtw)  # for themes fastdtw (themesDescriptTopOrd) dist_euclidean (docsOfThemesOrdened) hellinger(docsOfThemesOrdened)
     dis_matrix_time = getMatrixByTime(docsOfThemesOrdened, topicsSumary, datesThemes)
 
-    #print("matrix content")
-    #print(dis_matrix)
-    #print("matrix time")
-    #print(dis_matrix_time)
+    dis_mCont_norm , dis_mTime_norm = normalize_matrix(dis_matrix_cont, dis_matrix_time)
 
-    dis_matrix = (numpy.matrix(dis_matrix) + 2*numpy.matrix(dis_matrix_time))/2
-    print(dis_matrix)
-    dis_matrix = numpy.multiply(dis_matrix, dis_matrix)
-    a = numpy.asarray(dis_matrix)
+    dis_matrix = (numpy.matrix(dis_mCont_norm) + numpy.matrix(dis_mTime_norm))/2
+    #dis_matrix = numpy.multiply(dis_matrix, dis_matrix) #para incrementar cada valor al doble
 
-    numpy.savetxt("dis_matrix.csv", a, delimiter=",")
+    #a = numpy.asarray(dis_matrix)
+    #numpy.savetxt("dis_matrix.csv", a, delimiter=",")
     #print('generate image of document')
     #generateImageDistribution(docsThemesOrdened, datesThemes, list(idToPmid.values()))  # muestraPmid generate image about themes' distribution of each document
 
@@ -197,8 +204,16 @@ if __name__ == '__main__':
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
     radialLayout(rootedTree)
-    jsonTree = treeToJsonPubmed(rootedTree, metaDoc, metaTheme)
-    jsonfile = open("result/cont_dtw_time1000_square2.json", 'w')
+
+    venue_to_color = {"BMC_Bioinformatics": "red", "Crit_Care": "Yellow", "Evid_Based_Complement_Alternat_Med": "Lime", "Genome_Biol": "Green", "J_Cell_Biol": "Aqua", "J_Exp_Med": "Purple", "J_Gen_Physiol": "Blue", "Malar_J": "Fuchsia", "Nucleic_Acids_Res": "Teal","Environ_Health_Perspect": "silver", "Diabetes_Care": "maroon"}
+
+    jsonTree = treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color)
+    name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/"+file_lda+"_only_content.json"
+    jsonfile = open(name_result, 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)
     #print("hello word")
+
+if __name__ == '__main__':
+    file_lda = 'pubmed_citation_lda_45_27991_27991_0.001_0.001_timeCtrl_3_4.5'
+    generateJsonbyClustering(file_lda)

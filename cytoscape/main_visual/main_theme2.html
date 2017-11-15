@@ -35,7 +35,8 @@
     <script src='js/d3.min.js'></script>
     <script src='js/d3.layout.min.js'></script>
     <script src='js/rickshaw.min.js'></script>
-    <script src="js/code_main_theme.js"></script>
+
+    <script src="js/code_main_theme3.js"></script>
 
 </head>
 
@@ -67,10 +68,30 @@
                 <option value="cont_dtw_time1000.json">cont_dtw_time1000</option>
                 -->
                 <option value="cont_dtw_time1000_square2.json">cont_dtw_time1000_square2n</option>
+                <option value="prueba_color45.json">prueba_color45.json</option>
+                <option value="prueba_color.json">prueba_color.json</option>
+                <option value="prueba_color2.json">prueba_color2.json</option>
+                <option value="prueba_color3.json">prueba_color2.json</option>
+
+                <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_40</option>
+                <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_time.json">pubmed_citation_lda_40_time</option>
+                <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_time2.json">pubmed_citation_lda_40_time2</option>
+                <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_con_mas_time_2.json">pubmed_citation_con_mas_time_2</option>
+
+                <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_20_union</option>
+                <option value="pubmed_citation_lda_9_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_9</option>
+                <option value="pubmed_citation_lda_18_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_18</option>
+                <option value="pubmed_citation_lda_27_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_27</option>
+                <option value="pubmed_citation_lda_36_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_36</option>
+                <option value="pubmed_citation_lda_45_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_45</option>
+                <option value="pubmed_citation_lda_90_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_90</option>
+                <option value="pubmed_citation_lda_180_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_180</option>
+                <option value="pubmed_citation_lda_270_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_270</option>
 
             </select>
         </div>
       </div>
+      <button id="playPause">Play/ Pause</button>
       <div class="panel-group" id="accordion">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -108,6 +129,17 @@
                     <tbody id="top_words">
                     </tbody>
                   </table>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Titles</a>
+            </h4>
+          </div>
+          <div id="collapse3" class="panel-collapse collapse">
+              <ul id="titles_list" class="list-group">
+              </ul>
           </div>
         </div>
       </div>

@@ -735,8 +735,8 @@ if (__name__ == '__main__'):
     # ===========================================================================
     # Generate body File
     # ===========================================================================
-    #generateBodyDataset(pubmedFolderPathLst)
-    #generateBodyFile(metaDataFilePath, citFilePath, bodyFilePath)
+    generateBodyDataset(pubmedFolderPathLst)
+    generateBodyFile(metaDataFilePath, citFilePath, bodyFilePath)
 
     # ===========================================================================
     # PubMed Corpus

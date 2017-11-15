@@ -16,7 +16,7 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  right: 17em;
+  right: 25em;
   height:85%;
   overflow:hidden;
 }
@@ -26,7 +26,7 @@ body {
   right: 0;
   top: 0;
   bottom: 0;
-  width: 17em;
+  width: 25em;
   background: rgba(0, 0, 0, 0.75);
   box-sizing: border-box;
   padding: 1em;
@@ -99,14 +99,19 @@ a:hover {
 {
   position: absolute;
   left: 0;
-  right: 17em;
+  right: 25em;
   height:15%;
   bottom: 25px;
 }
 
-th, td
+th, td, li
 {
     color:black;
+    font-size: 15px;
+}
+
+button{
+    color: black;
 }
 
 .rickshaw_graph .detail .x_label { display: none }
