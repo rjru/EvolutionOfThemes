@@ -136,11 +136,15 @@ $("#result_from").change(function () {
 			//cy.add(data)
 			//console.log(data.edges[0]["data"]["length"])
 
-			var defaults = {
+			var params = {
                 name: 'cola',
                 //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
                 edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
                 nodeSpacing: function( node ){ return 1; },
+                nodeSpacing: 5,
+                edgeLengthVal: 45,
+                animate: true,
+                randomize: false,
                 //edgeLength
                 //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
                 //edgeJaccardLength: undefined
@@ -149,8 +153,49 @@ $("#result_from").change(function () {
             };
 
             //cy.fit(); # holaaa
-            var ly = cy.layout(defaults) //{name: 'cola'}
+            var ly = cy.layout(params) //{name: 'cola'}
             //cy.center();
+
+            //var $config = $('#config');
+            //var $btnParam = $('<div class="param"></div>');
+            //$config.append( $btnParam );
+
+            /*
+              var sliders = [
+              {
+                label: 'Node spacing',
+                param: 'nodeSpacing',
+                min: 1,
+                max: 50
+              }
+            ];
+            */
+            //sliders.forEach( makeSlider );
+
+            //function makeSlider( opts ){
+              var $input = $('#in');
+              //var $param = $('<div class="param"></div>');
+
+              //$param.append('<span class="label label-default">'+ opts.label +'</span>');
+              //$param.append( $input );
+
+              //$config.append( $param );
+
+              var p = $input.slider({
+                min: 3,
+                max: 10,
+                //value: params[ opts.param ]
+              }).on('slide', _.throttle( function(){
+
+                console.log(p.getValue())
+                //params[ opts.param ] = p.getValue();
+
+                //ly.stop();  //'width': '0.5em',   cy.$('node').not('[class="grey"]').layout(defaults)
+                cy.style().selector('node[class!="grey"]').style({'width': p.getValue().toString().concat('em'), 'height': p.getValue().toString().concat('em')}).update()
+                //ly.run();
+              }, 16 ) ).data('slider');
+            //}
+
 
             var flag = true;
             //cy.layout({name: 'cola'})
@@ -160,7 +205,7 @@ $("#result_from").change(function () {
 
                       //console.log(cy.$('node')[0]._private.style.label.hide())   'label': 'data(yearTheme)'
                       var stringStylesheet = 'node { label: "data(label)" }';
-                      console.log(cy.style().selector('node').style('label', '').update() );
+                      cy.style().selector('node').style('label', '').update();
                     ly.run();
                 } else {
                     $(this).html('Play');

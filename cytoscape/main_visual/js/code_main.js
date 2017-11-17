@@ -18,16 +18,16 @@ $("#result_from").change(function () {
 			            //'label': 'data(label)',
 			            //'width': '0.5px',
 			            //'height': '0.5px',
-			            'width': '0.02em',
-			            'height': '0.02em',
-			            'color': 'yellow',
+			            'width': '50em',
+			            'height': '50em',
+			            'color': 'black',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
 			            'border-style': 'solid',
-			            'border-width': '0.0002em',
-			            'border-color': 'white',
+			            //'border-width': '1em',
+			            //'border-color': 'gray',
 			            //'font-size' : '0.5px',
-			            'font-size' : '0.02em',
+			            'font-size' : '2em',
 			            'background-color': 'data(class)'
 			      		}
 			    },
@@ -37,13 +37,13 @@ $("#result_from").change(function () {
 			            //'label': 'data(label)',
 			            //'width': '0.5px',
 			            //'height': '0.5px',
-			            'width': '0.01em',
-			            'height': '0.01em',
+			            'width': '0.5em',
+			            'height': '0.5em',
 			            'color': 'yellow',
 			            'background-fit': 'contain',
 			            'background-clip': 'none',
 			            'border-style': 'solid',
-			            'border-width': '0.0002em',
+			            'border-width': '0.02em',
 			            'border-color': 'white',
 			            //'font-size' : '0.5px',
 			            'font-size' : '0.02em',
@@ -55,9 +55,9 @@ $("#result_from").change(function () {
 			      style: {
 
 			            'text-background-color': 'yellow',
-			            'text-background-opacity': 0.4,
+			            'text-background-opacity': 0.7,
 			            //'width': '0.05em',
-			            'width': '0.001em',
+			            'width': '5em',
 			            'control-point-step-size': '0.3em',
 			            'line-color': 'black'
 			             }
@@ -66,6 +66,7 @@ $("#result_from").change(function () {
 
 			  layout: {
 			          name: 'preset',
+			          positions: function(node){  return node.position({x:node.position('x')*1000, y:node.position('y')*1000}); }
 			          /*
 			          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
 			          zoom: undefined, // the zoom level to set (prob want fit = false if set)
@@ -83,6 +84,30 @@ $("#result_from").change(function () {
 			      	  }
 			      //layout:{defaults}
 			}); // fin citoscape
+
+
+            //function makeSlider( opts ){
+              var $input = $('#in');
+              //var $param = $('<div class="param"></div>');
+
+              //$param.append('<span class="label label-default">'+ opts.label +'</span>');
+              //$param.append( $input );
+
+              //$config.append( $param );
+
+              var p = $input.slider({
+                min: 30,
+                max: 300,
+                //value: params[ opts.param ]
+              }).on('slide', _.throttle( function(){
+
+                console.log(p.getValue())
+                //params[ opts.param ] = p.getValue();
+
+                //ly.stop();  //'width': '0.5em',   cy.$('node').not('[class="grey"]').layout(defaults)
+                cy.style().selector('node[class!="grey"]').style({'width': p.getValue().toString().concat('em'), 'height': p.getValue().toString().concat('em')}).update()
+                //ly.run();
+              }, 50 ) ).data('slider');
 
 			//cy.add(data)
 			//console.log(data.edges[0]["data"]["length"])
