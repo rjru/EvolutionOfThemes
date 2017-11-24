@@ -18,6 +18,7 @@ RUN_DIR = '/home/xwang95/run/';
 TEST_NUMBER = "test_6"
 #TEST_ROOT = 'C:/Users/rbrto-pc/Google Drive/citation_lda/tests/'
 TEST_ROOT = 'C:/Users/rbrto-pc/Documents/tests/'
+TEST_ROOT_N = TEST_ROOT + TEST_NUMBER + '/'
 TEST_DATA = TEST_ROOT+TEST_NUMBER+'/data/'
 TEST_RESOURCE = TEST_ROOT+TEST_NUMBER+'/'
 TEST_RESULT = TEST_ROOT+TEST_NUMBER+'/result/'

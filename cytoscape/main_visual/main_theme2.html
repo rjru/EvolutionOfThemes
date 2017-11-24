@@ -18,6 +18,8 @@
 	<link type="text/css" rel="stylesheet" href="css/detail.css">
 	<link type="text/css" rel="stylesheet" href="css/legend.css">
 	<link type="text/css" rel="stylesheet" href="css/lines.css">
+	<link type="text/css" rel="stylesheet" href="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.min.css">
+
 
     <script src="js/d3.v3.js"></script>
     <script src="js/fastclick.min.js"></script>
@@ -35,7 +37,7 @@
     <script src='js/d3.min.js'></script>
     <script src='js/d3.layout.min.js'></script>
     <script src='js/rickshaw.min.js'></script>
-
+    <script src="http://mistic100.github.io/jQCloud/dist/jqcloud2/dist/jqcloud.min.js"></script>
     <script src="js/code_main_theme3.js"></script>
 
 </head>
@@ -68,17 +70,21 @@
                 <option value="cont_dtw_time1000.json">cont_dtw_time1000</option>
                 -->
                 <option value="cont_dtw_time1000_square2.json">cont_dtw_time1000_square2n</option>
+
+                <!--
                 <option value="prueba_color45.json">prueba_color45.json</option>
                 <option value="prueba_color.json">prueba_color.json</option>
                 <option value="prueba_color2.json">prueba_color2.json</option>
                 <option value="prueba_color3.json">prueba_color2.json</option>
-
+                -->
+                <!--
                 <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_40</option>
                 <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_time.json">pubmed_citation_lda_40_time</option>
                 <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_time2.json">pubmed_citation_lda_40_time2</option>
                 <option value="pubmed_citation_lda_40_17201_17201_0.001_0.001_timeCtrl_3_4.5_con_mas_time_2.json">pubmed_citation_con_mas_time_2</option>
-
+                -->
                 <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_20_union</option>
+                <!--
                 <option value="pubmed_citation_lda_9_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_9</option>
                 <option value="pubmed_citation_lda_18_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_18</option>
                 <option value="pubmed_citation_lda_27_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_27</option>
@@ -87,10 +93,34 @@
                 <option value="pubmed_citation_lda_90_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_90</option>
                 <option value="pubmed_citation_lda_180_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_180</option>
                 <option value="pubmed_citation_lda_270_27991_27991_0.001_0.001_timeCtrl_3_4.5.json">pubmed_citation_lda_270</option>
-
+                -->
             </select>
         </div>
       </div>
+
+
+      <div class="param">
+        <div class="form-group">
+          <label form="sel1">Node Label</label>
+            <select class="form-control" id="node_label">
+                <option value="none_label">None Label</option>
+                <option value="name_theme">Names of themes</option>
+                <option value="date_theme">Dates of themes</option>
+            </select>
+        </div>
+      </div>
+
+    <div class="param">
+       <div class="form-group">
+          <label form="sel1">node painting</label>
+            <select class="form-control" id="paint_node">
+                <option value="none_color">None color</option>
+                <option value="class_color">Class color</option>
+                <option value="pie_color">Pie Color</option>
+            </select>
+        </div>
+      </div>
+
         <div class="param">
             <span class="label label-default"> Size Node </span>
             
@@ -148,5 +178,14 @@
           </div>
         </div>
       </div>
-    </div>
+      <div class="param">
+        <div>
+          Key word: <input id="input_search" type="text" name="fname"><br>
+          <button type="button" id="search_button">Search!</button>
+        </div>
+      </div>
+      <div class="param">
+            <div id="wordcloud" class="demo"></div>
+      </div>
+
 </body>

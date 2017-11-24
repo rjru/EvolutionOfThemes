@@ -104,7 +104,7 @@ a:hover {
   bottom: 25px;
 }
 
-th, td, li
+th, td, li, input
 {
     color:black;
     font-size: 15px;
@@ -114,7 +114,26 @@ button{
     color: black;
 }
 
+#wordcloud {
+    width: 300px;
+    height: 300px;
+    color: #FFFFFF;
+    font-family: Impact;
+}
+
 .rickshaw_graph .detail .x_label { display: none }
 .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
 .detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
 .rickshaw_graph .detail .date { color: #a0a0a0 }
+
+.swatch {
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.swatch {
+    display: inline-block;
+    margin-right: 3px;
+    border-radius: 2px;
+}

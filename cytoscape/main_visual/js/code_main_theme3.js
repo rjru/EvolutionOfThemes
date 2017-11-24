@@ -3,6 +3,7 @@ $( document ).ready(function() {
 
 var graph = null;
 var hoverDetail = null;
+colors_pubmed = {'Malar_J':'Fuchsia', 'Nucleic_Acids_Res':'Teal'};
 
 $("#result_from").change(function () {
 
@@ -53,7 +54,7 @@ $("#result_from").change(function () {
 			    {
 			      selector: 'node',
 			      style:{
-			            'label': 'data(yearTheme)',
+			            //'label': 'data(yearTheme)',
 			            'width': '2em',
 			            'height': '2em',
 			            'color': 'black',
@@ -63,7 +64,8 @@ $("#result_from").change(function () {
 			            'border-width': '0.1em',
 			            'border-color': 'gray',
 			            'font-size' : '2em',
-			            'background-color': 'data(class)'
+			            //'background-color': 'data(class)',
+			            'background-color': '#40FF00'
 			      		}
 			    },
 			    {
@@ -152,9 +154,72 @@ $("#result_from").change(function () {
                 infinite: true
             };
 
+            $('#search_button').on('click', function() {
+               var value = $("#input_search").val();
+               cy.$('node[class!="grey"]').forEach(function( ele ){
+                if (typeof ele.data('topWords')[value] == 'undefined'){
+                    console.log(ele.data('id'))
+                    cy.style().selector(ele).style({'width': '0.2'.concat('em'), 'height': '0.2'.concat('em')}).update()
+                }else{
+                    console.log(ele.data('id'), ele.data('topWords')[value])
+                    cy.style().selector(ele).style({'width': (ele.data('topWords')[value]*10).toString().concat('em'), 'height': (ele.data('topWords')[value]*10).toString().concat('em')}).update()
+                }
+               });
+               //console.log(value)
+            });
+
             //cy.fit(); # holaaa
             var ly = cy.layout(params) //{name: 'cola'}
             //cy.center();
+
+            $("#node_label").change(function () {
+                var type_label = $("#node_label :selected").attr('value');
+                if(type_label == "none_label"){cy.style().selector('node').style('label', '').update();}
+                if(type_label == "name_theme"){cy.style().selector('node').style('label', 'data(label)').update();}
+                if(type_label == "date_theme"){cy.style().selector('node').style('label', 'data(yearTheme)').update();}
+                //var stringStylesheet = 'node { label: "data(label)" }';
+
+            });
+
+
+            $("#paint_node").change(function () {
+                var type_label = $("#paint_node :selected").attr('value');
+                if(type_label == "none_color"){
+                    cy.$('node[class!="grey"]').forEach(function( ele ){
+                          cy.style().selector(ele).style({
+                          'pie-size': '0%',
+                          'background-color':'#40FF00'
+                          }).update()
+                    });
+                }
+                if(type_label == "class_color"){
+                    cy.$('node[class!="grey"]').forEach(function( ele ){
+                          cy.style().selector(ele).style({
+                          'pie-size': '0%',
+                          'background-color':'data(class)'
+                          }).update()
+                    });
+                }
+                if(type_label == "pie_color"){
+
+                    cy.$('node[class!="grey"]').forEach(function( ele ){
+                      //console.log( ele.id() );
+                      var topVenueSort = setFormatJs(ele.data("topVenue"), 'string');
+                      topVenueSort.sort(function (a, b) {return  b.y - a.y;});
+                      console.log(topVenueSort)
+                      //style().ele.style({'width':'30em'}).update()
+                      cy.style().selector(ele).style({
+                      'pie-size': '100%',
+                      'pie-1-background-color':colors_pubmed[topVenueSort[0]["x"]], 'pie-1-background-size':String(topVenueSort[0]["y"]*100)+'%',
+                      'pie-2-background-color':colors_pubmed[topVenueSort[1]["x"]], 'pie-2-background-size':String(topVenueSort[1]["y"]*100)+'%',
+                      //'pie-3-background-color':'#74E883', 'pie-3-background-size':String(topVenueSort[2]["y"]*100)+'%',
+                      //'pie-4-background-color':'#E1E52B', 'pie-4-background-size':String(topVenueSort[3]["y"]*100)+'%'
+                      }).update()
+                    });
+                }
+                //var stringStylesheet = 'node { label: "data(label)" }';
+
+            });
 
             //var $config = $('#config');
             //var $btnParam = $('<div class="param"></div>');
@@ -202,10 +267,7 @@ $("#result_from").change(function () {
             $('#playPause').on('click', function() {
                 if(flag) {
                     $(this).html('Pause');
-
                       //console.log(cy.$('node')[0]._private.style.label.hide())   'label': 'data(yearTheme)'
-                      var stringStylesheet = 'node { label: "data(label)" }';
-                      cy.style().selector('node').style('label', '').update();
                     ly.run();
                 } else {
                     $(this).html('Play');
@@ -362,14 +424,17 @@ $("#result_from").change(function () {
               else{
 			      ts = this.data("topDistribution");
 			      console.log(ts);
+			      console.log("click normal")
 			      // add rows top venue
 			      $("#top_venues").html('');
 
                   var topVenueSort = setFormatJs(this.data("topVenue"), 'string');
                   topVenueSort.sort(function (a, b) {return  b.y - a.y;});
                   //console.log(topVenueSort)
+
                   for (v in topVenueSort){
-                    $('#top_venues').append('<tr class="item"><td>'+ topVenueSort[v]['x'].replace(/_/g , " ") +'</td><td>'+ topVenueSort[v]['y'] +'</td></tr>');
+                  console.log(v)
+                    $('#top_venues').append('<tr class="item"><td><div class="swatch" style="background-color:'+ colors_pubmed[topVenueSort[v]['x']] +';"></div>'+ topVenueSort[v]['x'].replace(/_/g , " ") +'</td><td>'+ topVenueSort[v]['y'] +'</td></tr>');
                    }
 
                   $("#top_words").html('');
@@ -402,6 +467,37 @@ $("#result_from").change(function () {
                   graph.update();
 
 			  // END LIBRARY OF TIME SERIES
+                  // http://mistic100.github.io/jQCloud/demo.html
+			      var words = [];
+                  jQuery('#wordcloud').jQCloud(words, {})
+                  for(e in this.data("topWords")){words.push({text:e, weight:this.data("topWords")[e]})}
+
+			      console.log(words)
+			      /*
+                  var words = [
+                      {text: "Sinesy", weight: 13},
+                      {text: "Handler", weight: 12},
+                      {text: "Dolor", weight: 9.4},
+                      {text: "Sit", weight: 8},
+                      {text: "Amet", weight: 6.2},
+                      {text: "Consectetur", weight: 5},
+                      {text: "Adipiscing", weight: 5},
+                      {text: "Tag1", weight: 10},
+                      {text: "Tag2", weight: 10.5},
+                      {text: "Tag3", weight: 9.4},
+                      {text: "Tag4", weight: 8},
+                      {text: "Tag5", weight: 6.2},
+                      {text: "Tag6", weight: 5},
+                      {text: "Tag7", weight: 5}
+                    ];
+                       */
+                    //$('#wordcloud').html('')
+                    jQuery('#wordcloud').jQCloud('update', words, {
+                      //shape: 'rectangular',
+                      colors: ["rgb(31, 119, 180)", "rgb(174, 199, 232)", "rgb(255, 127, 14)", "rgb(255, 187, 120)", "rgb(44, 160, 44)", "rgb(152, 223, 138)", "rgb(214, 39, 40)", "rgb(255, 152, 150)", "rgb(148, 103, 189)", "rgb(197, 176, 213)", "rgb(140, 86, 75)", "rgb(227, 119, 194)", "rgb(247, 182, 210)", "rgb(127, 127, 127)", "rgb(199, 199, 199)", "rgb(188, 189, 34)", "rgb(23, 190, 207)", "rgb(158, 218, 229)", "rgb(196, 156, 148)", "rgb(219, 219, 141)"]
+                     });
+
+
               }
 			}); // fin click
 

@@ -29,6 +29,7 @@ $("#result_from").change(function () {
 			            //'font-size' : '0.5px',
 			            'font-size' : '2em',
 			            'background-color': 'data(class)'
+
 			      		}
 			    },
 			    {
@@ -161,7 +162,7 @@ $("#result_from").change(function () {
 
 			cy.on('click', 'node', function(evt){
 			      ts = this.data("vectorTS");
-			      console.log(ts);
+			      //console.log(this);
 			      ///*
 			      $("#tss").html('');
 			  var graph = new Rickshaw.Graph( {
