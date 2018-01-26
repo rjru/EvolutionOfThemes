@@ -67,7 +67,7 @@ def nodesToJsonPubmed(tree, nodes, metaTheme, venue_to_color):
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
                                "topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
                                "param_1": topicsSumary[1] if topicsSumary else "",
-                               "yearTheme": round(topicsSumary[2],2) if topicsSumary else "",
+                               "yearTheme": round(topicsSumary[2], 2) if topicsSumary else "",
                                "param_3": topicsSumary[3] if topicsSumary else "",
                                "topWords": dict((y, x) for x, y in topicsSumary[5]) if topicsSumary else "",
                                "topVenue": dict((y, x) for x, y in topicsSumary[6]) if topicsSumary else "",
@@ -95,7 +95,7 @@ def edgesToJson(tree, edges):
         edgesToJson(tree.getRightChild(), edges)
     return edges
 
-def treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color):
+def treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color, allJsonDocThemeTop):
     #print('nodes json')
     nodes = []
     nodesJs = nodesToJsonPubmed(rootedTree, nodes, metaTheme, venue_to_color)
@@ -125,10 +125,67 @@ def treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color):
     idToPmidDict = {str(key): metaDoc["idToPmid"][key] for key in metaDoc["idToPmid"]}
     idDocOrdened = {str(key): metaDoc["idDocOrdened"][key] for key in metaDoc["idDocOrdened"]}
 
-    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDocDic, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened, "docDates": metaDoc["datesDoc"]}
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs, "metaDoc": metaDocDic, "idToPmid": idToPmidDict, "idDocOrdened": idDocOrdened, "docDates": metaDoc["datesDoc"], "njInNode": allJsonDocThemeTop}
 
     return str(jsonTree).replace("'", '"')
 
+#    metaDoc = {"pubmed": pubmed, "pmidToId": pmidToId,
+#               "idToPmid": idToPmid, "distributionDoc": docsDescript, "idDocOrdened": idDocOrdened, "datesDoc": datesDoc
+#               }
+
+# to format json by document
+def nodesToJsonPubmedDoc(tree, nodes, metaDoc, venue_to_color):
+    constOf = 1500  # constante para multiplicar las distancias porque son muy pequeñas
+    if tree != None:
+        nodesToJsonPubmedDoc(tree.getLeftChild(), nodes, metaDoc, venue_to_color)
+        nodesToJsonPubmedDoc(tree.getRightChild(), nodes, metaDoc, venue_to_color)
+        #print(tree.getRootVal())
+        # 'Yes' if fruit == 'Apple' else 'No'
+        # arreglar el .index para documentos
+        #distributionDoc = None if tree.getRootVal()[0] == "i" else metaDoc["distributionDoc"][metaDoc["nameThemes"].index(tree.getRootVal())]
+        #topicsSumary = None if tree.getRootVal()[0] == "i" else metaDoc["topicsSumary"][metaDoc["nameThemes"].index(tree.getRootVal())]
+
+        #print(tree.getX()[0], "; ", tree.getX()[1])
+        nodes.append({"data": {"id": tree.getRootVal(),
+                               "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
+                               #"topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
+                               "class": "grey" if tree.getRootVal()[0] == "i" else "GreenYellow"
+                               #"class": "grey" if tree.getRootVal()[0] == "i" else venue_to_color[topicsSumary[6][0][1]]
+                               },
+                      "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}
+                      }) #json.loads(json.dumps(tree.getExtraInformation()["year"]))
+    return nodes
+
+def edgesToJsonDoc(tree, edges):
+    #if tree != None:
+    cons = 1
+    if tree.getLeftChild() != None:
+        edges.append({"data": {"id": "edge"+str(len(edges)),
+                               "source": tree.getLeftChild().getParent().getRootVal(),
+                               "target": tree.getLeftChild().getRootVal(),
+                               "length": cons*tree.getLeftChild().getweightAristToParentVal()}})
+        edgesToJson(tree.getLeftChild(), edges)
+    if tree.getRightChild() != None:
+        edges.append({"data": {"id": "edge"+str(len(edges)),
+                               "source": tree.getRightChild().getParent().getRootVal(),
+                               "target": tree.getRightChild().getRootVal(),
+                               "length": cons*tree.getRightChild().getweightAristToParentVal()
+                               }})
+        edgesToJson(tree.getRightChild(), edges)
+    return edges
+
+def treeToJsonPubmedDoc(rootedTree, metaDoc, metaTheme, venue_to_color):
+    #print('nodes json')
+    nodes = []
+    nodesJs = nodesToJsonPubmedDoc(rootedTree, nodes, metaDoc, venue_to_color)
+    edges = []
+    edgesJs = edgesToJsonDoc(rootedTree, edges)
+
+    jsonTree = {"nodes": nodesJs, "edges": edgesJs}
+    #return str(jsonTree).replace("'", '"')
+    return jsonTree
+
+# time series
 def nodesToJsonTimeSeries(tree, nodes, vectorTS, label_group, scalaColor):
 
     constOf = 10  # constante para multiplicar las distancias porque son muy pequeñas

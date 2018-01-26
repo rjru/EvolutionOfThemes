@@ -35,7 +35,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="css/bootstrap-slider.min.css">
-  <link href="css/style.css" rel="stylesheet" />
   <link type="text/css" rel="stylesheet" href="css/jquery.qtip.min.css" />
 
   <!-- <link type="text/css" rel="stylesheet" href="css/base_ui/jquery.ui.all.css"> -->
@@ -44,7 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link type="text/css" rel="stylesheet" href="css/legend.css">
   <link type="text/css" rel="stylesheet" href="css/lines.css">
   <link type="text/css" rel="stylesheet" href="css/jqcloud.min.css">
-
+  <link href="css/style.css" rel="stylesheet" />
 
   <script src="js/d3.v3.js"></script>
   <script src="js/fastclick.min.js"></script>
@@ -120,8 +119,13 @@ desired effect
           <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
           </li>
-        </ul>
-      </div>
+            <li>
+                <a href="#">
+                    <i class="fa fa-comments-o"></i>&nbsp;&nbsp;Contact Us
+                </a>
+            </li>
+            </ul>
+            </div>
     </nav>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
@@ -149,7 +153,15 @@ desired effect
               <label>Select:</label>
               <select class="form-control" id="result_from">
                   <option value="undefined">--------</option>
+                  <option value="pubCit_20_union_NJinNode.json">pubCit_20_union_NJinNode</option>
                   <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_20_union</option>
+                  <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_20_only_content</option>
+                  <option value="pubmed_citation_lda_40_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_40_union</option>
+                  <option value="pubmed_citation_lda_40_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_40_only_content</option>
+                  <option value="pubmed_citation_lda_80_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_80_union</option>
+                  <option value="pubmed_citation_lda_80_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_80_only_content</option>
+                  <option value="pubmed_citation_lda_100_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_100_union</option>
+                  <option value="pubmed_citation_lda_100_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_100_only_content</option>
               </select>
             </div>
            </li>
@@ -283,10 +295,22 @@ desired effect
                   <div class="box-body no-padding">
                       <div class="row">
                           <div class="col-xs-12">
-                              <div class="pad">
-                                   <div  class="chart" style="height: 450px;">
-                                      <div id="cy"></div>
-                                   </div>
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="pad">
+                                           <div  class="chart" style="height: 450px;">
+                                              <div id="cy"></div>
+                                           </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <div class="pad">
+                                           <div  class="chart" style="height: 450px;">
+                                              <div id="cy_in_node"></div>
+                                           </div>
+                                      </div>
+                                  </div>
+
                               </div>
                           </div>
                       </div>

@@ -1,12 +1,8 @@
-from toolkit import utility, variables
-import os.path;
+from toolkit import variables
 from corpus.pubmed import PubMed
 from deep_nlp.text import wordTokenize;
-from theme_discovery.citation_based_method import readTopicSummary
-from collections import Counter
 from nltk import *
 import pickle
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem.porter import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -14,7 +10,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 def getTexOfDocs(docs): #extrae el texto que viene a ser el title + abstract + body
     dictTextDoc = {}
     for doc in docs:
-        dictTextDoc[doc] = '' if 'title' not in docs[doc] else docs[doc]['title'] + '' if 'abstract' not in docs[doc] else docs[doc]['abstract'] + '' if 'body' not in docs[doc] else docs[doc]['body']
+        aux = '' if 'title' not in docs[doc] else docs[doc]['title'] + '' if 'abstract' not in docs[doc] else docs[doc]['abstract'] + '' if 'body' not in docs[doc] else docs[doc]['body']
+        if aux != "":
+            dictTextDoc[doc] = aux
+
     return dictTextDoc;
 
 def getTokenTexOftDocs(DicTextDocs):
@@ -65,7 +64,7 @@ def tokenize(text):
     return stems
 
 def get_matrix(contentDocs):
-    tfidf = TfidfVectorizer(tokenizer=tokenize, stop_words='english', max_features=100,  encoding='utf-8', decode_error='replace')
+    tfidf = TfidfVectorizer(tokenizer=tokenize, stop_words='english', max_features=200,  encoding='utf-8', decode_error='replace')
     tfs = tfidf.fit_transform(contentDocs)
 
     print("tfidf.fit_transform")
@@ -81,15 +80,15 @@ def get_matrix(contentDocs):
             m.write(w)
         m.write("\n")
 
-
-    #res_matrix = cosine_similarity(tfs, tfs, dense_output=False)
+    res_matrix1 = cosine_similarity(tfs, tfs, dense_output=True)
 
     #print("cosine simlilarity sin round")
     #filehandler = open('vector.cosine', 'wb')
     #pickle.dump(res_matrix, filehandler)
 
-    #res_matrix = abs(res_matrix.todense().round(8) - 1)
-    return 1
+    res_matrix = abs(res_matrix1.round(8) - 1)  # .todense()
+
+    return res_matrix
 
 def convertToList(DicTextDocs):
     id = []
@@ -120,6 +119,7 @@ if (__name__ == '__main__'):
 
 
     print("Get text of docs")
+    #muestra doc: es un diccionario con el pmid y los datos de cada paper
     DicTextDocs = getTexOfDocs(muestra_docs)
     idListTextDocs, listTextDocs = convertToList(DicTextDocs)
     print("Get Matrix")

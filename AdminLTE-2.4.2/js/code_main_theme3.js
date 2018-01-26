@@ -135,6 +135,8 @@ $("#result_from").change(function () {
 			      //layout:{defaults}
 			}); // fin citoscape
 
+
+
 			//cy.add(data)
 			//console.log(data.edges[0]["data"]["length"])
 
@@ -170,6 +172,7 @@ $("#result_from").change(function () {
 
             //cy.fit(); # holaaa
             var ly = cy.layout(params) //{name: 'cola'}
+            //var ly2 = cyInNode.layout(params)
             //cy.center();
 
             $("#node_label").change(function () {
@@ -395,6 +398,113 @@ $("#result_from").change(function () {
               }
               return color;
             }
+
+
+            cy.on("cxttap", "node", function (evt) {
+                console.log("click derecho nueva version 3", this.id(), result.njInNode[this.id()])
+              var cyInNode = cytoscape({
+			  container: document.getElementById('cy_in_node'),
+               /*
+			  layout: {
+			            name: 'cola',
+			            //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
+			            edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
+			            ready: function(){}, // on layoutready
+			            //edgeLength
+                        //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
+                        //edgeJaccardLength: undefined
+                        //fit: true,
+			            infinite: true
+			            }, */
+			  elements: result.njInNode[this.id()],
+			  // so we can see the ids
+			  style:
+			  [
+			    {
+			      selector: 'node',
+			      style:{
+			            //'label': 'data(yearTheme)',
+			            'width': '2em',
+			            'height': '2em',
+			            'color': 'black',
+			            'background-fit': 'contain',
+			            'background-clip': 'none',
+			            'border-style': 'solid',
+			            'border-width': '0.1em',
+			            'border-color': 'gray',
+			            'font-size' : '2em',
+			            //'background-color': 'data(class)',
+			            'background-color': '#40FF00'
+			      		}
+			    },
+			    {
+			      selector: 'node:selected',
+                  style: {
+                    "border-width": '5em',
+                    "border-color": '#FE2E2E',
+                    "border-opacity": '0.5',
+                    //"background-color": '#2efe2e',
+                    "text-outline-color": '#77828C'
+                  }
+                 },
+			    {
+			      selector: 'node[class="grey"]',
+			      style:{
+			            //'label': 'data(label)',
+			            //'width': '0.5px',
+			            //'height': '0.5px',
+			            'width': '0.5em',
+			            'height': '0.5em',
+			            'color': 'yellow',
+			            'background-fit': 'contain',
+			            'background-clip': 'none',
+			            'border-style': 'solid',
+			            'border-width': '0.02em',
+			            'border-color': 'white',
+			            //'font-size' : '0.5px',
+			            'font-size' : '0.02em',
+			            'background-color': 'data(class)'
+			      		}
+			    },
+			    {
+			      selector: 'edge',
+			      style: {
+
+			            'text-background-color': 'yellow',
+			            'text-background-opacity': 0.4,
+			            'width': '0.2em',
+			            'control-point-step-size': '0.3em',
+			            'line-color': 'gray'
+			             }
+			    }
+			  ],
+
+
+			  layout: {
+			          name: 'preset',
+                      //fit:false,
+			          /*
+
+			          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
+			          zoom: undefined, // the zoom level to set (prob want fit = false if set)
+			          pan: undefined, // the pan level to set (prob want fit = false if set)
+			          fit: true, // whether to fit to viewport
+			          padding: 20, // padding on fit
+			          animate: true, // whether to transition the node positions
+			          animationDuration: 500, // duration of animation in ms if enabled
+			          animationEasing: undefined, // easing of animation if enabled
+			          animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+			          ready: undefined, // callback on layoutready
+			          stop: undefined, // callback on layoutstop
+			          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts
+			      	  */
+			      	  }
+			      	  //
+
+			      //layout:{defaults}
+			}); // fin citoscape
+
+            });
 
 			cy.on('click', 'node', function(evt){
 

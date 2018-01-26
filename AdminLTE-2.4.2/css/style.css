@@ -6,6 +6,12 @@
 
 }
 
+#cy_in_node {
+  width:100%;
+  height:100%;
+
+}
+
 #tss
 {
     position: absolute;
@@ -14,9 +20,8 @@
 }
 
 #wordcloud {
-    margin-left: 30px;
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     color: #FFFFFF;
     font-family: Impact;
 }
@@ -63,4 +68,20 @@ table{
 label{
     color: white;
     font-family: Arial, sans-serif;
+}
+
+.content-wrapper{
+    margin-left: 300px;
+}
+
+.main-sidebar{
+    width:300px;
+}
+
+.main-header .logo{
+    width:300px;
+}
+
+.main-header .navbar{
+    margin-left: 300px;
 }
