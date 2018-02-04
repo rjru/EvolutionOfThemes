@@ -121,6 +121,10 @@ button{
     font-family: Impact;
 }
 
+.jqcloud-word{
+    position: static;
+}
+
 .rickshaw_graph .detail .x_label { display: none }
 .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
 .detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }

@@ -144,12 +144,11 @@ def nodesToJsonPubmedDoc(tree, nodes, metaDoc, venue_to_color):
         # arreglar el .index para documentos
         #distributionDoc = None if tree.getRootVal()[0] == "i" else metaDoc["distributionDoc"][metaDoc["nameThemes"].index(tree.getRootVal())]
         #topicsSumary = None if tree.getRootVal()[0] == "i" else metaDoc["topicsSumary"][metaDoc["nameThemes"].index(tree.getRootVal())]
-
         #print(tree.getX()[0], "; ", tree.getX()[1])
         nodes.append({"data": {"id": tree.getRootVal(),
                                "label": tree.getRootVal() if tree.getRootVal()[0] != 'i' else '',
                                #"topDistribution": getTopDistribution(distributionTheme, 0.001),  # getTopDistribution(tree, umbral)
-                               "class": "grey" if tree.getRootVal()[0] == "i" else "GreenYellow"
+                               "class": "grey" if tree.getRootVal()[0] == "i" else venue_to_color[metaDoc["pubmed"].docs[int(tree.getRootVal())]["venue"]]
                                #"class": "grey" if tree.getRootVal()[0] == "i" else venue_to_color[topicsSumary[6][0][1]]
                                },
                       "position": {"x": constOf * tree.getX()[0], "y": constOf * tree.getX()[1]}

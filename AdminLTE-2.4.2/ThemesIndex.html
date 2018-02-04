@@ -148,9 +148,8 @@ desired effect
 
       <!-- Sidebar Menu -->
 <ul class="sidebar-menu tree" data-widget="tree">
-        <li class="header">LOAD THE DATA</li>
             <li><div class="m form-group">
-              <label>Select:</label>
+              <label>Select Result:</label>
               <select class="form-control" id="result_from">
                   <option value="undefined">--------</option>
                   <option value="pubCit_20_union_NJinNode.json">pubCit_20_union_NJinNode</option>
@@ -165,15 +164,8 @@ desired effect
               </select>
             </div>
            </li>
-        <li class="header">MAIN NAVIGATION</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="treeview">
-            <a href="#">
-              <i class="fa fa-dashboard"></i> <span>NODE PROPERTIES</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
             <ul class="treeview-menu" style="display: none;">
               <form class="form-horizontal">
                 <div class="box-body">
@@ -270,13 +262,56 @@ desired effect
               </table>
           </ul>
         </li>
+        <li id="tree_wordcloud" class="treeview">
+            <a  href="#">
+              <i class="fa fa-dashboard"></i> <span>Word Cloud</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+          <ul class="treeview-menu">
+                <div id="wordcloud_first" class="jqcloud">
 
-        <li class="header">WORDS CLOUD</li>
+                </div>
+          </ul>
+        </li>
 
-        <div class="chart">
-          <div id="wordcloud"></div>
-        </div>
+        <div id="wordcloud_second"></div>
 
+
+        <li class="header">DOCUMENT PROPERTIES</li>
+            <li class="treeview">
+            <a  href="#">
+              <i class="fa fa-dashboard"></i> <span>Document Metadata</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+          <ul class="treeview-menu">
+            <div class="row">
+                <div class="col-md-12">
+                      <div class="box box-solid">
+                          <div class="box-body">
+                              <dl>
+                                <dt>ID:</dt>
+                                <dd id="id_doc"></dd>
+
+                                <dt>Title:</dt>
+                                <dd id="title_doc"></dd>
+
+                                <dt>Year:</dt>
+                                <dd id="year_doc"></dd>
+
+                                <dt>Link:</dt>
+                                <dd id="link_doc"></dd>
+                              </dl>
+                          </div>
+                      </div>
+                </div>
+            </div>
+          </ul>
+
+        </li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -434,4 +469,4 @@ desired effect
      Both of these plugins are recommended to enhance the
      user experience. -->
 </body>
-</html>
+</html>                                                                                                                                                                                                                                                                                                                                                                                             

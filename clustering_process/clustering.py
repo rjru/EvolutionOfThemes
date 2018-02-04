@@ -243,7 +243,7 @@ def generateJsonbyClustering(file_lda):
     jsonTree = treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color, allJsonDocThemeTop)
 
     #name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/"+file_lda+"_only_content.json"
-    name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/probando_borrar.json"
+    name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/pubCit_20_union_NJinNode.json"
     jsonfile = open(name_result, 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)

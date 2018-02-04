@@ -19,11 +19,29 @@
     height: 100%;
 }
 
-#wordcloud {
+#wordcloud_second {
+    color: #FFFFFF;
+    font-family: Impact;
+}
+
+.descript{
+    color: #2A8D0D;
+    font-family: Arial, sans-serif;
+    word-wrap: break-word;
+}
+
+
+#wordcloud_first {
     width: 300px;
     height: 300px;
     color: #FFFFFF;
     font-family: Impact;
+}
+
+#wordcloud_second{
+   position: absolute;
+   top: -9999px;
+   left: -9999px;
 }
 
 .rickshaw_graph .detail .x_label { display: none }

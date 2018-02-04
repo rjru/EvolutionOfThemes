@@ -3,6 +3,8 @@ $( document ).ready(function() {
 
 var graph = null;
 var hoverDetail = null;
+var cyInNode;
+
 colors_pubmed = {'Malar_J':'Fuchsia', 'Nucleic_Acids_Res':'Teal'};
 
 $("#result_from").change(function () {
@@ -354,11 +356,10 @@ $("#result_from").change(function () {
 
             graph.render();
 
-
             hoverDetail = new Rickshaw.Graph.HoverDetail( {
             graph: graph,
             formatter: function(series, x, y) {
-                console.log("result")
+                console.log("result Hereee!", x, y)
                 //console.log(result.idToPmid[x])
                 var title = '<span class="date">' + result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["title"] + '</span>'; //parseFloat(x)
                 var swatch = '<span class="detail_swatch" style="background-color:"></span>'; // ' + series.color + '
@@ -369,7 +370,6 @@ $("#result_from").change(function () {
                 return content;
             }
           });
-
 
             cy.on('tap', function(event){
               // target holds a reference to the originator
@@ -399,10 +399,9 @@ $("#result_from").change(function () {
               return color;
             }
 
-
             cy.on("cxttap", "node", function (evt) {
-                console.log("click derecho nueva version 3", this.id(), result.njInNode[this.id()])
-              var cyInNode = cytoscape({
+                console.log("click derecho nueva version 4", this.id(), result.njInNode[this.id()])
+              cyInNode = cytoscape({
 			  container: document.getElementById('cy_in_node'),
                /*
 			  layout: {
@@ -434,7 +433,7 @@ $("#result_from").change(function () {
 			            'border-color': 'gray',
 			            'font-size' : '2em',
 			            //'background-color': 'data(class)',
-			            'background-color': '#40FF00'
+			            'background-color':'data(class)'
 			      		}
 			    },
 			    {
@@ -504,7 +503,22 @@ $("#result_from").change(function () {
 			      //layout:{defaults}
 			}); // fin citoscape
 
+
+                cyInNode.on('click', 'node', function(evt){
+
+                   cyInNode.style().selector('node[class!="grey"]').style({"border-width": '0em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();
+                   cyInNode.style().selector(this).style({"border-width": '5em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
+
+
+                   $("#id_doc").text(this.id());
+                   $("#title_doc").text(result.metaDoc[this.id()]["title"]);
+                   $("#year_doc").text(result.metaDoc[this.id()]["year"]);
+                   $("#link_doc").text('https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
+                   // aquiiii
+                });
+
             });
+
 
 			cy.on('click', 'node', function(evt){
 
@@ -576,52 +590,66 @@ $("#result_from").change(function () {
                   data.push({name: this.id(), data: setFormatJs(ts, 'number'), color: '#FE2E2E'});
                   graph.update();
 
-			  // END LIBRARY OF TIME SERIES
+			      // END LIBRARY OF TIME SERIES
                   // http://mistic100.github.io/jQCloud/demo.html
 			      var words = [];
-                  jQuery('#wordcloud').jQCloud(words, {})
+                  jQuery('#wordcloud_second').jQCloud(words, {width: 300,
+                        height: 300});
+
                   for(e in this.data("topWords")){words.push({text:e, weight:this.data("topWords")[e]})}
 
-			      console.log(words)
-			      /*
-                  var words = [
-                      {text: "Sinesy", weight: 13},
-                      {text: "Handler", weight: 12},
-                      {text: "Dolor", weight: 9.4},
-                      {text: "Sit", weight: 8},
-                      {text: "Amet", weight: 6.2},
-                      {text: "Consectetur", weight: 5},
-                      {text: "Adipiscing", weight: 5},
-                      {text: "Tag1", weight: 10},
-                      {text: "Tag2", weight: 10.5},
-                      {text: "Tag3", weight: 9.4},
-                      {text: "Tag4", weight: 8},
-                      {text: "Tag5", weight: 6.2},
-                      {text: "Tag6", weight: 5},
-                      {text: "Tag7", weight: 5}
-                    ];
-                       */
+			      //console.log(words)
                     //$('#wordcloud').html('')
-                    jQuery('#wordcloud').jQCloud('update', words, {
+                   //$('#tree_wordcloud').on('click', function() {
+                      console.log("click word cloud")
+                      jQuery('#wordcloud_second').jQCloud('update', words, {
+                        width: 300,
+                        height: 300,
                       //shape: 'rectangular',
                       colors: ["rgb(31, 119, 180)", "rgb(174, 199, 232)", "rgb(255, 127, 14)", "rgb(255, 187, 120)", "rgb(44, 160, 44)", "rgb(152, 223, 138)", "rgb(214, 39, 40)", "rgb(255, 152, 150)", "rgb(148, 103, 189)", "rgb(197, 176, 213)", "rgb(140, 86, 75)", "rgb(227, 119, 194)", "rgb(247, 182, 210)", "rgb(127, 127, 127)", "rgb(199, 199, 199)", "rgb(188, 189, 34)", "rgb(23, 190, 207)", "rgb(158, 218, 229)", "rgb(196, 156, 148)", "rgb(219, 219, 141)"]
                      });
-
+                   //});
+                   $('#wordcloud_first').html($('#wordcloud_second').html())
 
               }
 			}); // fin click
+
+
+            $('#tree_wordcloud').on('click', function() {
+                //console.log($('#wc_1').html());
+                $('#wordcloud_first').html($('#wordcloud_second').html())
+            });
+
 
 			$('#config-toggle').on('click', function(){
 			  $('body').toggleClass('config-closed');
 			  cy.resize();
 			});
 
-			$("#tss").on('click', function(){
-              console.log(document.getElementById("pmid").getAttribute("data-pmid"));
+			$("#tss").on('click', function(evt){
+               var pmid = document.getElementById("pmid").getAttribute("data-pmid");
+               cyInNode.style().selector('node[class!="grey"]').style({"border-width": '0em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();
+               cyInNode.style().selector(cyInNode.getElementById(pmid)).style({"border-width": '5em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
+/*
+               cyInNode.$('node[class!="grey"]').forEach(function( ele ){
+                if (ele.data('id') == pmid){
+                    console.log('CHI',ele.data('id'))
+                    cyInNode.style().selector(ele).style({"border-width": '5em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update()
+                }
+               });
+*/
+                console.log(cyInNode.getElementById(pmid));
+            });
+
+            $("#tss").bind("contextmenu", function(){
+              //console.log(document.getElementById("pmid").getAttribute("data-pmid"));
               var pmid = document.getElementById("pmid").getAttribute("data-pmid");
               window.open('https://www.ncbi.nlm.nih.gov/pubmed/'+pmid);
 
             });
+
+
+
 
 	},
 	error:function (xhr, ajaxOptions, thrownError){
