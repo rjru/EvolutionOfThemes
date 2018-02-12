@@ -98,7 +98,7 @@ desired effect
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>PhyloTheme</b>Vis</span>
+      <span class="logo-lg"><b>PhyloTheme</b></span>
     </a>
 
     <!-- Header Navbar -->
@@ -152,6 +152,8 @@ desired effect
               <label>Select Result:</label>
               <select class="form-control" id="result_from">
                   <option value="undefined">--------</option>
+
+
                   <option value="pubCit_20_union_NJinNode.json">pubCit_20_union_NJinNode</option>
                   <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_20_union</option>
                   <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_20_only_content</option>
@@ -165,7 +167,15 @@ desired effect
             </div>
            </li>
         <!-- Optionally, you can add icons to the links -->
+        <li class="header">THEME PROPERTIES</li>
         <li class="treeview">
+            <a href="#">
+              <i class="fa fa-check-circle-o"></i> <span>Settiings</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
             <ul class="treeview-menu" style="display: none;">
               <form class="form-horizontal">
                 <div class="box-body">
@@ -219,11 +229,9 @@ desired effect
               </form>
             </ul>
         </li>
-
-        <li class="header">THEME PROPERTIES</li>
         <li class="treeview">
             <a href="#">
-              <i class="fa fa-dashboard"></i> <span>Top Venues</span>
+              <i class="fa fa-check-circle-o"></i> <span>Top Venues</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -244,7 +252,7 @@ desired effect
         </li>
         <li class="treeview">
             <a href="#">
-              <i class="fa fa-dashboard"></i> <span>Top Word</span>
+              <i class="fa fa-check-circle-o"></i> <span>Top Word</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -264,7 +272,7 @@ desired effect
         </li>
         <li id="tree_wordcloud" class="treeview">
             <a  href="#">
-              <i class="fa fa-dashboard"></i> <span>Word Cloud</span>
+              <i class="fa fa-check-circle-o"></i> <span>Word Cloud</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -282,7 +290,7 @@ desired effect
         <li class="header">DOCUMENT PROPERTIES</li>
             <li class="treeview">
             <a  href="#">
-              <i class="fa fa-dashboard"></i> <span>Document Metadata</span>
+              <i class="fa fa-check-circle-o"></i> <span>Document Metadata</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
@@ -303,7 +311,7 @@ desired effect
                                 <dd id="year_doc"></dd>
 
                                 <dt>Link:</dt>
-                                <dd id="link_doc"></dd>
+                                <dd><a href="#" id="link_doc"></a></dd>
                               </dl>
                           </div>
                       </div>

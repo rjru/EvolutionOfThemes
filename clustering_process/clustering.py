@@ -67,6 +67,7 @@ def getMatrixDist(docsThemesOrdened, distance_method):
 
     for v1 in range(0, lenMuesta):
         for v2 in range(0, lenMuesta):
+            print("\r In {} Loading... {}".format(v1, v2), end="")
             if v1 == v2:
                 dis_matrix[v1][v2] = 0
             if v1 < v2:

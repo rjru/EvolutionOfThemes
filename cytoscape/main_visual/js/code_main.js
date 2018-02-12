@@ -5,7 +5,8 @@
 $("#result_from").change(function () {
 	  var namefile = $("#result_from :selected").attr('value');
 	  console.log(namefile)
-	  $.ajax({dataType:"json", url: "https://raw.githubusercontent.com/rjru/EvolutionOfThemes/master/cytoscape/main_visual/data/"+namefile, success: function(result){
+	  //$.ajax({dataType:"json", url: "https://raw.githubusercontent.com/rjru/EvolutionOfThemes/master/cytoscape/main_visual/data/"+namefile, success: function(result){
+	  $.ajax({dataType:"json", url: "../../clustering_process/result/"+namefile, success: function(result){
 			  var cy = cytoscape({
 			  container: document.getElementById('cy'),
 			  elements: result,

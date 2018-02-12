@@ -24,11 +24,14 @@
     font-family: Impact;
 }
 
-.descript{
-    color: #2A8D0D;
-    font-family: Arial, sans-serif;
-    word-wrap: break-word;
+.skin-blue .sidebar a#link_doc {
+    color: #3e00ff;
 }
+
+dd{
+    white-space: initial;
+}
+
 
 
 #wordcloud_first {

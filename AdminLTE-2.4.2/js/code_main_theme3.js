@@ -513,7 +513,8 @@ $("#result_from").change(function () {
                    $("#id_doc").text(this.id());
                    $("#title_doc").text(result.metaDoc[this.id()]["title"]);
                    $("#year_doc").text(result.metaDoc[this.id()]["year"]);
-                   $("#link_doc").text('https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
+                   $("#link_doc").text('pubmed/'+this.id());
+                   $("#link_doc").attr("href", 'https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
                    // aquiiii
                 });
 
