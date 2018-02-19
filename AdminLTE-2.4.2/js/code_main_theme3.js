@@ -366,7 +366,7 @@ $("#result_from").change(function () {
                 var year = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["year"];
                 var pmid = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["pmid"];
                 var venue = result.metaDoc[result.idToPmid[result.idDocOrdened[x]]]["venue"];
-                var content = swatch + series.name + ": " + parseFloat(y).toFixed(5) + " pmid: <span id='pmid' data-pmid="+pmid+">"+ pmid + "</span> venue:" + venue +" year:" + year + '<br>' + title; //
+                var content = swatch + "Prob: " + parseFloat(y).toFixed(5) + " pmid: <span id='pmid' data-pmid="+pmid+">"+ pmid + "</span> venue:" + venue +" year:" + year + '<br>' + title; //
                 return content;
             }
           });
