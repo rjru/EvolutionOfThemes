@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from scipy import spatial
 
 def hellinger(p, q, dist=None):
     return np.sqrt(np.sum((np.sqrt(p) - np.sqrt(q)) ** 2)) / np.sqrt(2), 0
@@ -43,3 +44,14 @@ def dist_euclidean(v1, v2, dist=None):
     dist = [(a - b)**2 for a, b in zip(v1, v2)]
     dist = math.sqrt(sum(dist))
     return dist, 0
+
+def dist_cosine(v1, v2, dist=None):
+    return spatial.distance.cosine(v1, v2), 0
+
+if __name__ == '__main__':
+    a = [3, 5, 3, 9, 5]
+    b = [5, 5, 5, 5, 5]
+
+    print(DTWDistance(a, b))
+    print(dist_euclidean(a, b))
+    print(round(dist_cosine(a, b),5))

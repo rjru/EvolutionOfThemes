@@ -72,7 +72,7 @@ def getMatrixDist(docsThemesOrdened, distance_method):
                 dis_matrix[v1][v2] = 0
             if v1 < v2:
                 dist_temp, path = distance_method(docsThemesOrdened[v1], docsThemesOrdened[v2], dist=euclidean)
-                #dist_temp = distance_method(docsThemesOrdened[v1], docsThemesOrdened[v2])
+                #dist_temp, var = distance_method(docsThemesOrdened[v1], docsThemesOrdened[v2])
                 dis_matrix[v1][v2] = dist_temp
                 dis_matrix[v2][v1] = dist_temp
 
@@ -188,7 +188,7 @@ def njByDoc(pubmed, themesDescript, idToPmid, metaDoc, metaTheme, venue_to_color
     return jsonNJinThemes
 
 
-def generateJsonbyClustering(file_lda):
+def generateJsonbyClustering(file_lda, result_name):
     pubmed = getPubMedCorpus()  # load raw data
     #print(pubmed.docs[21172003])
     (pmidToId, idToPmid) = getCitMetaGraphPmidIdMapping(pubmed)
@@ -229,14 +229,15 @@ def generateJsonbyClustering(file_lda):
     #print('save result pex format')
     #res = matrix_to_pex('matrix_of_docs', dis_matrix, muestraPmid)
     print('calculate matrix distance')
-    dis_matrix_cont = getMatrixDist(docsOfThemesOrdenedTop, fastdtw)  # for themes fastdtw (themesDescriptTopOrd) dist_euclidean (docsOfThemesOrdened) hellinger(docsOfThemesOrdened)
-    dis_matrix_time = getMatrixByTime(docsOfThemesOrdened, topicsSumary, datesThemes)
+    dis_matrix_cont = getMatrixDist(docsOfThemesOrdenedTop, fastdtw)  # for themes dist_cosine(docsOfThemesOrdened) fastdtw (docsOfThemesOrdenedTop) dist_euclidean (docsOfThemesOrdened) hellinger(docsOfThemesOrdened)
+    #dis_matrix_time = getMatrixByTime(docsOfThemesOrdened, topicsSumary, datesThemes)
 
-    dis_mCont_norm , dis_mTime_norm = normalize_matrix(dis_matrix_cont, dis_matrix_time)
+    #dis_mCont_norm , dis_mTime_norm = normalize_matrix(dis_matrix_cont, dis_matrix_time)
 
-    dis_matrix = (numpy.matrix(dis_mCont_norm) + numpy.matrix(dis_mTime_norm))/2
+    #dis_matrix = (numpy.matrix(dis_mCont_norm) + numpy.matrix(dis_mTime_norm))/2
     # método para aplicar nj y ademas calcula la raiz, mejor dicho lo convierte en un árbol con raiz
-    t = njWithRoot(dis_matrix, nameThemes)  # for themes
+    
+    t = njWithRoot(dis_matrix_cont, nameThemes)  # for themes / dis_matrix
 
     rootedTree = EteTreeToBinaryTree(t)  # since now, we use only themes
     radialLayout(rootedTree)
@@ -244,8 +245,8 @@ def generateJsonbyClustering(file_lda):
     jsonTree = treeToJsonPubmed(rootedTree, metaDoc, metaTheme, venue_to_color, allJsonDocThemeTop)
 
     #name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/"+file_lda+"_only_content.json"
-    name_result = "C:/Users/rbrto-pc/Google Drive/citation_lda/src/clustering_process/final_result/pubCit_20_union_NJinNode.json"
-    jsonfile = open(name_result, 'w')
+    path_res = "D:/Google Drive/citation_lda/src/clustering_process/final_result/"
+    jsonfile = open(path_res+result_name, 'w')
     #print(jsonTree)
     jsonfile.write(jsonTree)
     #print("hello word")

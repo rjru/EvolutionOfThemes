@@ -20,4 +20,4 @@ if __name__ == '__main__':
     #print(num_t)
     #theme_evolution.printVenEntropy(result_name)
     file_lda = "pubmed_citation_lda_" + str(num_t) + "_12954_12954_0.001_0.001_timeCtrl_" + str(burninHr) + "_" + str(sampliHr)
-    generateJsonbyClustering(file_lda)
+    generateJsonbyClustering(file_lda, 'pubCit_20_content_dtw.json')

@@ -106,3 +106,26 @@ label{
 .main-header .navbar{
     margin-left: 300px;
 }
+
+.rickshaw_annotation_timeline .annotation.active .content {
+    display: none;
+}
+
+.rickshaw_annotation_timeline .annotation:hover .content {
+    display: none;
+}
+
+.rickshaw_annotation_timeline .annotation.active, .rickshaw_annotation_timeline .annotation:hover {
+    background-color: rgba(0, 46, 255, 0.8);
+    cursor: default;
+}
+
+.rickshaw_annotation_timeline .annotation {
+    position: absolute;
+    height: 6px;
+    width: 6px;
+    margin-left: -2px;
+    top: -3px;
+    border-radius: 5px;
+    background-color: rgba(25, 0, 255, 0.56);
+}

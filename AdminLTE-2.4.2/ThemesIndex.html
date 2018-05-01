@@ -60,6 +60,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src='js/d3.min.js'></script>
   <script src='js/d3.layout.min.js'></script>
   <script src='js/rickshaw.min.js'></script>
+  <script src='js/Rickshaw.Graph.Annotate.js'></script>
   <script src="js/jqcloud.min.js"></script>
   <script src="js/code_main_theme3.js"></script>
 
@@ -153,8 +154,10 @@ desired effect
               <select class="form-control" id="result_from">
                   <option value="undefined">--------</option>
 
-
                   <option value="pubCit_20_union_NJinNode.json">pubCit_20_union_NJinNode</option>
+                  <option value="pubCit_20_content_euclidean.json">pubCit_20_content_euclidean</option>
+                  <option value="pubCit_20_content_cosine.json">pubCit_20_content_cosine</option>
+                  <option value="pubCit_20_content_dtw.json">pubCit_20_content_dtw</option>
                   <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_20_union</option>
                   <option value="pubmed_citation_lda_20_12954_12954_0.001_0.001_timeCtrl_1_1.5_only_content.json">pubmed_citation_lda_20_only_content</option>
                   <option value="pubmed_citation_lda_40_12954_12954_0.001_0.001_timeCtrl_1_1.5_union.json">pubmed_citation_lda_40_union</option>
@@ -365,6 +368,7 @@ desired effect
                               <div class="col-xs-12">
                                     <div class="chart" style="height: 100px;">
                                        <div id="tss"></div>
+                                       <div id="timeline"></div>
                                     </div>
                                 <!-- /.description-block -->
                               </div>

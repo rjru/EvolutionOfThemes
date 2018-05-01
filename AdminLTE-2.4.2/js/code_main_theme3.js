@@ -3,6 +3,7 @@ $( document ).ready(function() {
 
 var graph = null;
 var hoverDetail = null;
+
 var cyInNode;
 
 colors_pubmed = {'Malar_J':'Fuchsia', 'Nucleic_Acids_Res':'Teal'};
@@ -35,7 +36,7 @@ $("#result_from").change(function () {
 
 	  //console.log(max_edge)
 
-			  var cy = cytoscape({
+			var cy = cytoscape({
 			  container: document.getElementById('cy'),
                /*
 			  layout: {
@@ -136,8 +137,6 @@ $("#result_from").change(function () {
 
 			      //layout:{defaults}
 			}); // fin citoscape
-
-
 
 			//cy.add(data)
 			//console.log(data.edges[0]["data"]["length"])
@@ -252,7 +251,7 @@ $("#result_from").change(function () {
               //$config.append( $param );
 
               var p = $input.slider({
-                min: 3,
+                min: 0.2,
                 max: 10,
                 //value: params[ opts.param ]
               }).on('slide', _.throttle( function(){
@@ -398,13 +397,14 @@ $("#result_from").change(function () {
               }
               return color;
             }
-
+            //cy.$(':selected').remove();
+            // ele.selected()
             cy.on("cxttap", "node", function (evt) {
-                console.log("click derecho nueva version 4", this.id(), result.njInNode[this.id()])
+                //console.log("click derecho nueva version 4", this.id(), result.njInNode[this.id()])
               cyInNode = cytoscape({
-			  container: document.getElementById('cy_in_node'),
-               /*
-			  layout: {
+			    container: document.getElementById('cy_in_node'),
+                /*
+			    layout: {
 			            name: 'cola',
 			            //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
 			            edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
@@ -415,8 +415,8 @@ $("#result_from").change(function () {
                         //fit: true,
 			            infinite: true
 			            }, */
-			  elements: result.njInNode[this.id()],
-			  // so we can see the ids
+			    elements: result.njInNode[this.id()],
+			    // so we can see the ids
 			  style:
 			  [
 			    {
@@ -439,7 +439,7 @@ $("#result_from").change(function () {
 			    {
 			      selector: 'node:selected',
                   style: {
-                    "border-width": '5em',
+                    "border-width": '1em',
                     "border-color": '#FE2E2E',
                     "border-opacity": '0.5',
                     //"background-color": '#2efe2e',
@@ -499,15 +499,19 @@ $("#result_from").change(function () {
 			      	  */
 			      	  }
 			      	  //
-
 			      //layout:{defaults}
 			}); // fin citoscape
 
+              // https://stackoverflow.com/questions/46076684/cytoscape-js-detecting-if-any-nodes-have-been-selected-on-boxend
+              var annotator = new Rickshaw.Graph.Annotate({
+                  graph: graph,
+                  element: document.getElementById('timeline')
+              });
 
                 cyInNode.on('click', 'node', function(evt){
 
                    cyInNode.style().selector('node[class!="grey"]').style({"border-width": '0em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();
-                   cyInNode.style().selector(this).style({"border-width": '5em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
+                   cyInNode.style().selector(this).style({"border-width": '1em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
 
 
                    $("#id_doc").text(this.id());
@@ -516,10 +520,85 @@ $("#result_from").change(function () {
                    $("#link_doc").text('pubmed/'+this.id());
                    $("#link_doc").attr("href", 'https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
                    // aquiiii
+
+                    // en las variables existe idtopmid pero se necesita pmidtoid esa es la mejor solución por el momento se hará solo una busqueda
+                    mark_Key = null;
+                    for(var key in result.idToPmid) {
+                        //console.log(result.idToPmid[key]," ", Number(this.id()))
+                        if(result.idToPmid[key] === Number(this.id())) {
+                            mark_Key = key;
+                            console.log("key: ",key, "pmid: ", this.id())
+                            break;
+                        }
+                    }
+
+                    // deberia optimizarse hace dos busquedas
+                    for(var key in result.idDocOrdened) {
+                        //console.log(result.idToPmid[key]," ", Number(this.id()))
+                        if(result.idDocOrdened[key] === Number(mark_Key)) {
+                            mark_Key = key;
+                            console.log("key real: ", mark_Key)
+                            break;
+                        }
+                    }
+
+                    annotator.add(mark_Key, "");
+                    console.log(annotator)
+                    annotator.update();
+
+
+
+                });
+
+                cyInNode.on('tap', function(event){
+                  var evtTarget = event.target;
+                  if( evtTarget === cyInNode ){
+                      console.log('tap on background');
+                        $("#timeline").html('');
+
+                  } else {
+                    console.log('tap on some element');
+                  }
+                });
+
+                            //cy.$(':selected').remove();
+            // ele.selected()
+            cyInNode.$('node[class!="grey"]').on("box", function (evt) {
+                    ran_color = getRandomColor();
+
+                    evt.target.css("border-color", ran_color);
+                    console.log(evt.target.id())//cy.$(':selected'));
+
+                    mark_Key = null;
+                    for(var key in result.idToPmid) {
+                        //console.log(result.idToPmid[key]," ", Number(this.id()))
+                        if(result.idToPmid[key] === Number(evt.target.id())) {
+                            mark_Key = key;
+                            console.log("key: ",key, "pmid: ", evt.target.id())
+                            break;
+                        }
+                    }
+
+                    // deberia optimizarse hace dos busquedas
+                    for(var key in result.idDocOrdened) {
+                        //console.log(result.idToPmid[key]," ", Number(this.id()))
+                        if(result.idDocOrdened[key] === Number(mark_Key)) {
+                            mark_Key = key;
+                            console.log("key real: ", mark_Key)
+                            break;
+                        }
+                    }
+
+                    //annotator.css("border-color", ran_color);
+                    annotator.add(mark_Key, "");
+                    console.log(annotator)
+                    annotator.update();
+
+                    $(".annotation").last().attr( 'id', mark_Key)
+                    $('#'+mark_Key).css("background-color", ran_color);
                 });
 
             });
-
 
 			cy.on('click', 'node', function(evt){
 
@@ -528,7 +607,7 @@ $("#result_from").change(function () {
               if(evt.originalEvent.ctrlKey) {
                 console.log(this.id())
                 if (this.selected()){
-                    console.log("unselect")
+                    //console.log("unselect")
                     for (var i = 0; i < data.length; i ++) {
                         if (data[i].name == this.id()) {
                             data.splice(i, 1);
@@ -537,19 +616,21 @@ $("#result_from").change(function () {
                     }
                 }
                 else{
-                    console.log("select")
+                    //console.log("select")
 
                     this.css("border-color", ran_color);
                     ts = this.data("topDistribution");
                     data.push({name: this.id(), data: setFormatJs(ts, 'number'), color: ran_color});
-                    console.log(data)
+                    //console.log(data)
                 }
                 graph.update();
               }
               else{
+                  $("#timeline").html('');
+
 			      ts = this.data("topDistribution");
-			      console.log(ts);
-			      console.log("click normal")
+			      console.log(setFormatJs(ts, 'number'));
+			      //console.log("click normal")
 			      // add rows top venue
 			      $("#top_venues").html('');
 
@@ -558,7 +639,7 @@ $("#result_from").change(function () {
                   //console.log(topVenueSort)
 
                   for (v in topVenueSort){
-                  console.log(v)
+                  //console.log(v)
                     $('#top_venues').append('<tr class="item"><td><div class="swatch" style="background-color:'+ colors_pubmed[topVenueSort[v]['x']] +';"></div>'+ topVenueSort[v]['x'].replace(/_/g , " ") +'</td><td>'+ topVenueSort[v]['y'] +'</td></tr>');
                    }
 
@@ -602,7 +683,7 @@ $("#result_from").change(function () {
 			      //console.log(words)
                     //$('#wordcloud').html('')
                    //$('#tree_wordcloud').on('click', function() {
-                      console.log("click word cloud")
+                      //console.log("click word cloud")
                       jQuery('#wordcloud_second').jQCloud('update', words, {
                         width: 300,
                         height: 300,
@@ -611,10 +692,9 @@ $("#result_from").change(function () {
                      });
                    //});
                    $('#wordcloud_first').html($('#wordcloud_second').html())
-
+                   // aqui
               }
 			}); // fin click
-
 
             $('#tree_wordcloud').on('click', function() {
                 //console.log($('#wc_1').html());
