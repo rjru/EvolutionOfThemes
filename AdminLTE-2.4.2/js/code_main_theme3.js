@@ -376,16 +376,17 @@ $("#result_from").change(function () {
               var evtTarget = event.target;
 
               if( evtTarget === cy ){
-                  console.log('tap on background');
+                  console.log('tap on background (cy)');
                   while(data.length > 0) {
                       var e = data.pop();
                       //$(String(e.name)).css("border-color", '#FE2E2E');
                       //data.pop();
                   }
                   graph.update();
+                  $("#cy_in_node").html('');
 
               } else {
-                console.log('tap on some element');
+                console.log('tap on some element (cy)');
               }
             });
 
@@ -399,206 +400,185 @@ $("#result_from").change(function () {
             }
             //cy.$(':selected').remove();
             // ele.selected()
-            cy.on("cxttap", "node", function (evt) {
+            //cy.on("cxttap", "node", function (evt) { });
+
+            function make_njinnode(){
                 //console.log("click derecho nueva version 4", this.id(), result.njInNode[this.id()])
-              cyInNode = cytoscape({
-			    container: document.getElementById('cy_in_node'),
-                /*
-			    layout: {
-			            name: 'cola',
-			            //maxSimulationTime: 20000,//800000, // max length in ms to run the layout
-			            edgeLength: function( edge ){var len = parseFloat(edge.data('length')); return Math.sqrt(len); },
-			            ready: function(){}, // on layoutready
-			            //edgeLength
-                        //edgeSymDiffLength: undefined, // symmetric diff edge length in simulation
-                        //edgeJaccardLength: undefined
-                        //fit: true,
-			            infinite: true
-			            }, */
-			    elements: result.njInNode[this.id()],
-			    // so we can see the ids
-			  style:
-			  [
-			    {
-			      selector: 'node',
-			      style:{
-			            //'label': 'data(yearTheme)',
-			            'width': '2em',
-			            'height': '2em',
-			            'color': 'black',
-			            'background-fit': 'contain',
-			            'background-clip': 'none',
-			            'border-style': 'solid',
-			            'border-width': '0.1em',
-			            'border-color': 'gray',
-			            'font-size' : '2em',
-			            //'background-color': 'data(class)',
-			            'background-color':'data(class)'
-			      		}
-			    },
-			    {
-			      selector: 'node:selected',
-                  style: {
-                    "border-width": '1em',
-                    "border-color": '#FE2E2E',
-                    "border-opacity": '0.5',
-                    //"background-color": '#2efe2e',
-                    "text-outline-color": '#77828C'
-                  }
-                 },
-			    {
-			      selector: 'node[class="grey"]',
-			      style:{
-			            //'label': 'data(label)',
-			            //'width': '0.5px',
-			            //'height': '0.5px',
-			            'width': '0.5em',
-			            'height': '0.5em',
-			            'color': 'yellow',
-			            'background-fit': 'contain',
-			            'background-clip': 'none',
-			            'border-style': 'solid',
-			            'border-width': '0.02em',
-			            'border-color': 'white',
-			            //'font-size' : '0.5px',
-			            'font-size' : '0.02em',
-			            'background-color': 'data(class)'
-			      		}
-			    },
-			    {
-			      selector: 'edge',
-			      style: {
+                cyInNode = cytoscape({
+                    container: document.getElementById('cy_in_node'),
+                    elements: result.njInNode[this.id()],
+                    // so we can see the ids
+                  style:
+                  [
+                    {
+                      selector: 'node',
+                      style:{
+                            //'label': 'data(yearTheme)',
+                            'width': '2em',
+                            'height': '2em',
+                            'color': 'black',
+                            'background-fit': 'contain',
+                            'background-clip': 'none',
+                            'border-style': 'solid',
+                            'border-width': '0.1em',
+                            'border-color': 'gray',
+                            'font-size' : '2em',
+                            //'background-color': 'data(class)',
+                            'background-color':'data(class)'
+                            }
+                    },
+                    {
+                      selector: 'node:selected',
+                      style: {
+                        "border-width": '1em',
+                        "border-color": '#FE2E2E',
+                        "border-opacity": '0.5',
+                        //"background-color": '#2efe2e',
+                        "text-outline-color": '#77828C'
+                      }
+                     },
+                    {
+                      selector: 'node[class="grey"]',
+                      style:{
+                            //'label': 'data(label)',
+                            //'width': '0.5px',
+                            //'height': '0.5px',
+                            'width': '0.5em',
+                            'height': '0.5em',
+                            'color': 'yellow',
+                            'background-fit': 'contain',
+                            'background-clip': 'none',
+                            'border-style': 'solid',
+                            'border-width': '0.02em',
+                            'border-color': 'white',
+                            //'font-size' : '0.5px',
+                            'font-size' : '0.02em',
+                            'background-color': 'data(class)'
+                            }
+                    },
+                    {
+                      selector: 'edge',
+                      style: {
 
-			            'text-background-color': 'yellow',
-			            'text-background-opacity': 0.4,
-			            'width': '0.2em',
-			            'control-point-step-size': '0.3em',
-			            'line-color': 'gray'
-			             }
-			    }
-			  ],
+                            'text-background-color': 'yellow',
+                            'text-background-opacity': 0.4,
+                            'width': '0.2em',
+                            'control-point-step-size': '0.3em',
+                            'line-color': 'gray'
+                             }
+                    }
+                  ],
 
 
-			  layout: {
-			          name: 'preset',
-                      //fit:false,
-			          /*
+                  layout: {
+                          name: 'preset',
+                          }
+                          //
+                      //layout:{defaults}
+                }); // fin citoscape
 
-			          positions: undefined, // map of (node id) => (position obj); or function(node){ return somPos; }
-			          zoom: undefined, // the zoom level to set (prob want fit = false if set)
-			          pan: undefined, // the pan level to set (prob want fit = false if set)
-			          fit: true, // whether to fit to viewport
-			          padding: 20, // padding on fit
-			          animate: true, // whether to transition the node positions
-			          animationDuration: 500, // duration of animation in ms if enabled
-			          animationEasing: undefined, // easing of animation if enabled
-			          animateFilter: function ( node, i ){ return true; }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
-			          ready: undefined, // callback on layoutready
-			          stop: undefined, // callback on layoutstop
-			          transform: function (node, position ){ return position; }, // transform a given node position. Useful for changing flow direction in discrete layouts
-			      	  */
-			      	  }
-			      	  //
-			      //layout:{defaults}
-			}); // fin citoscape
+                // https://stackoverflow.com/questions/46076684/cytoscape-js-detecting-if-any-nodes-have-been-selected-on-boxend
 
-              // https://stackoverflow.com/questions/46076684/cytoscape-js-detecting-if-any-nodes-have-been-selected-on-boxend
-              var annotator = new Rickshaw.Graph.Annotate({
-                  graph: graph,
-                  element: document.getElementById('timeline')
-              });
 
                 cyInNode.on('click', 'node', function(evt){
 
-                   cyInNode.style().selector('node[class!="grey"]').style({"border-width": '0em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();
-                   cyInNode.style().selector(this).style({"border-width": '1em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
+                       //cyInNode.style().selector('node[class!="grey"]').style({"border-width": '0em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();
+                       //cyInNode.style().selector(this).style({"border-width": '1em', "border-color": '#FE2E2E', "border-opacity": '0.5',"text-outline-color": '#77828C'}).update();  //css("border-color", '#FE2E2E');
 
+                       $("#timeline").html('');
 
-                   $("#id_doc").text(this.id());
-                   $("#title_doc").text(result.metaDoc[this.id()]["title"]);
-                   $("#year_doc").text(result.metaDoc[this.id()]["year"]);
-                   $("#link_doc").text('pubmed/'+this.id());
-                   $("#link_doc").attr("href", 'https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
-                   // aquiiii
+                       var annotator = new Rickshaw.Graph.Annotate({
+                          graph: graph,
+                          element: document.getElementById('timeline')
+                       });
 
-                    // en las variables existe idtopmid pero se necesita pmidtoid esa es la mejor solución por el momento se hará solo una busqueda
-                    mark_Key = null;
-                    for(var key in result.idToPmid) {
-                        //console.log(result.idToPmid[key]," ", Number(this.id()))
-                        if(result.idToPmid[key] === Number(this.id())) {
-                            mark_Key = key;
-                            console.log("key: ",key, "pmid: ", this.id())
-                            break;
+                       $("#id_doc").text(this.id());
+                       $("#title_doc").text(result.metaDoc[this.id()]["title"]);
+                       $("#year_doc").text(result.metaDoc[this.id()]["year"]);
+                       $("#link_doc").text('pubmed/'+this.id());
+                       $("#link_doc").attr("href", 'https://www.ncbi.nlm.nih.gov/pubmed/'+this.id());
+                       // aquiiii
+
+                        // en las variables existe idtopmid pero se necesita pmidtoid esa es la mejor solución por el momento se hará solo una busqueda
+                        mark_Key = null;
+                        for(var key in result.idToPmid) {
+                            //console.log(result.idToPmid[key]," ", Number(this.id()))
+                            if(result.idToPmid[key] === Number(this.id())) {
+                                mark_Key = key;
+                                console.log("key: ",key, "pmid: ", this.id())
+                                break;
+                            }
                         }
-                    }
 
-                    // deberia optimizarse hace dos busquedas
-                    for(var key in result.idDocOrdened) {
-                        //console.log(result.idToPmid[key]," ", Number(this.id()))
-                        if(result.idDocOrdened[key] === Number(mark_Key)) {
-                            mark_Key = key;
-                            console.log("key real: ", mark_Key)
-                            break;
+                        // deberia optimizarse hace dos busquedas
+                        for(var key in result.idDocOrdened) {
+                            //console.log(result.idToPmid[key]," ", Number(this.id()))
+                            if(result.idDocOrdened[key] === Number(mark_Key)) {
+                                mark_Key = key;
+                                console.log("key real: ", mark_Key)
+                                break;
+                            }
                         }
-                    }
 
-                    annotator.add(mark_Key, "");
-                    console.log(annotator)
-                    annotator.update();
-
-
-
-                });
+                        annotator.add(mark_Key, "");
+                        console.log(annotator)
+                        annotator.update();
+                    });
 
                 cyInNode.on('tap', function(event){
-                  var evtTarget = event.target;
-                  if( evtTarget === cyInNode ){
-                      console.log('tap on background');
-                        $("#timeline").html('');
+                      var evtTarget = event.target;
+                      if( evtTarget === cyInNode ){
+                          console.log('tap on background (cyInNode)');
+                            $("#timeline").html('');
 
-                  } else {
-                    console.log('tap on some element');
-                  }
-                });
+                      } else {
+                        console.log('tap on some element (cyInNode)');
+                      }
+                    });
 
-                            //cy.$(':selected').remove();
-            // ele.selected()
-            cyInNode.$('node[class!="grey"]').on("box", function (evt) {
-                    ran_color = getRandomColor();
+                //cy.$(':selected').remove();
+                // ele.selected()
+                cyInNode.$('node[class!="grey"]').on("box", function (evt) {
 
-                    evt.target.css("border-color", ran_color);
-                    console.log(evt.target.id())//cy.$(':selected'));
+                        var annotator = new Rickshaw.Graph.Annotate({
+                            graph: graph,
+                            element: document.getElementById('timeline')
+                        });
 
-                    mark_Key = null;
-                    for(var key in result.idToPmid) {
-                        //console.log(result.idToPmid[key]," ", Number(this.id()))
-                        if(result.idToPmid[key] === Number(evt.target.id())) {
-                            mark_Key = key;
-                            console.log("key: ",key, "pmid: ", evt.target.id())
-                            break;
+                        ran_color = getRandomColor();
+                        evt.target.css("border-color", ran_color);
+                        console.log(evt.target.id())//cy.$(':selected'));
+
+                        mark_Key = null;
+                        for(var key in result.idToPmid) {
+                            //console.log(result.idToPmid[key]," ", Number(this.id()))
+                            if(result.idToPmid[key] === Number(evt.target.id())) {
+                                mark_Key = key;
+                                console.log("key: ",key, "pmid: ", evt.target.id())
+                                break;
+                            }
                         }
-                    }
 
-                    // deberia optimizarse hace dos busquedas
-                    for(var key in result.idDocOrdened) {
-                        //console.log(result.idToPmid[key]," ", Number(this.id()))
-                        if(result.idDocOrdened[key] === Number(mark_Key)) {
-                            mark_Key = key;
-                            console.log("key real: ", mark_Key)
-                            break;
+                        // deberia optimizarse hace dos busquedas
+                        for(var key in result.idDocOrdened) {
+                            //console.log(result.idToPmid[key]," ", Number(this.id()))
+                            if(result.idDocOrdened[key] === Number(mark_Key)) {
+                                mark_Key = key;
+                                console.log("key real: ", mark_Key)
+                                break;
+                            }
                         }
-                    }
 
-                    //annotator.css("border-color", ran_color);
-                    annotator.add(mark_Key, "");
-                    console.log(annotator)
-                    annotator.update();
+                        //annotator.css("border-color", ran_color);
+                        annotator.add(mark_Key, "");
+                        console.log(annotator)
+                        annotator.update();
 
-                    $(".annotation").last().attr( 'id', mark_Key)
-                    $('#'+mark_Key).css("background-color", ran_color);
-                });
+                        $(".annotation").last().attr( 'id', mark_Key)
+                        $('#'+mark_Key).css("background-color", ran_color);
+                    });
 
-            });
+            };
 
 			cy.on('click', 'node', function(evt){
 
@@ -617,7 +597,6 @@ $("#result_from").change(function () {
                 }
                 else{
                     //console.log("select")
-
                     this.css("border-color", ran_color);
                     ts = this.data("topDistribution");
                     data.push({name: this.id(), data: setFormatJs(ts, 'number'), color: ran_color});
@@ -627,13 +606,11 @@ $("#result_from").change(function () {
               }
               else{
                   $("#timeline").html('');
-
 			      ts = this.data("topDistribution");
 			      console.log(setFormatJs(ts, 'number'));
 			      //console.log("click normal")
 			      // add rows top venue
 			      $("#top_venues").html('');
-
                   var topVenueSort = setFormatJs(this.data("topVenue"), 'string');
                   topVenueSort.sort(function (a, b) {return  b.y - a.y;});
                   //console.log(topVenueSort)
@@ -693,6 +670,7 @@ $("#result_from").change(function () {
                    //});
                    $('#wordcloud_first').html($('#wordcloud_second').html())
                    // aqui
+                   make_njinnode.apply(this);;
               }
 			}); // fin click
 
